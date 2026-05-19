@@ -23,10 +23,10 @@ const FINGER_LABELS = [
 ];
 
 const PLAN_SCALE = [
-  { value: 1, label: "Kaum umgesetzt" },
+  { value: 1, label: "Kaum" },
   { value: 2, label: "Teilweise" },
   { value: 3, label: "Größtenteils" },
-  { value: 4, label: "Gut umgesetzt" },
+  { value: 4, label: "Gut" },
   { value: 5, label: "Sehr gut" },
 ];
 
@@ -56,38 +56,22 @@ function getPreviousWeekKey(weekKey) {
 
 const STORAGE_KEY = "wochenroutine";
 
-// ==================== FOOTER ====================
+const footerLink = { fontSize: "13px", color: COLORS.midgray, textDecoration: "none", borderBottom: `1px solid ${COLORS.warmgray}`, paddingBottom: "1px" };
+
 function AppFooter({ onShowInfo }) {
   return (
-    <footer style={{
-      maxWidth: "520px",
-      margin: "0 auto",
-      padding: "24px 24px 40px",
-      textAlign: "center",
-      fontFamily: "'Georgia', serif",
-    }}>
+    <footer style={{ maxWidth: "520px", margin: "0 auto", padding: "24px 24px 40px", textAlign: "center", fontFamily: "'Georgia', serif" }}>
       <div style={{ display: "flex", justifyContent: "center", gap: "20px", flexWrap: "wrap" }}>
         <a href="https://www.so-smart.club/datenschutz" target="_blank" rel="noopener noreferrer" style={footerLink}>Datenschutz</a>
         <a href="https://www.so-smart.club/impressum" target="_blank" rel="noopener noreferrer" style={footerLink}>Impressum</a>
         <a href="https://www.so-smart.club/agb" target="_blank" rel="noopener noreferrer" style={footerLink}>AGB</a>
         <button onClick={onShowInfo} style={{ ...footerLink, background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "'Georgia', serif" }}>Hintergrundinformationen</button>
       </div>
-      <p style={{ fontSize: "11px", color: COLORS.warmgray, marginTop: "12px", fontFamily: "sans-serif" }}>
-        © {new Date().getFullYear()} so-smart.club
-      </p>
+      <p style={{ fontSize: "11px", color: COLORS.warmgray, marginTop: "12px", fontFamily: "sans-serif" }}>© {new Date().getFullYear()} so-smart.club</p>
     </footer>
   );
 }
 
-const footerLink = {
-  fontSize: "13px",
-  color: COLORS.midgray,
-  textDecoration: "none",
-  borderBottom: `1px solid ${COLORS.warmgray}`,
-  paddingBottom: "1px",
-};
-
-// ==================== INFO PAGE ====================
 function InfoPage({ onClose }) {
   return (
     <div style={styles.container}>
@@ -96,70 +80,40 @@ function InfoPage({ onClose }) {
           <h2 style={{ ...styles.stepTitle, margin: 0 }}>Hintergrundinformationen</h2>
           <button onClick={onClose} style={{ ...styles.secondaryBtn, padding: "8px 16px", fontSize: "13px" }}>Schließen</button>
         </div>
-
-        <Section title="Was die App ist">
-          Die 3×3 Wochenroutine ist ein digitaler Begleiter für Zeitmanagement und Selbstführung. Sie führt einmal pro Woche in 30 Minuten durch einen strukturierten Prozess aus Reflexion und Planung. Die App ersetzt keine bestehenden Tools — Teilnehmer nutzen weiterhin ihren eigenen Kalender und ihre eigene Aufgabenliste. Die App gibt den Rahmen, dokumentiert den Prozess und macht die persönliche Entwicklung über die Wochen sichtbar.
-        </Section>
-
-        <Section title="Der wöchentliche Ablauf">
-          <p style={infoP}>Die Routine besteht aus drei Schritten mit einer klaren Dramaturgie: Erst bei sich ankommen, dann zurückschauen, dann vorausplanen.</p>
-          <p style={infoP}><strong>Schritt 1 — 5-Finger-Reflexion (ca. 7 Minuten):</strong> Der Teilnehmer schaut auf seine Woche zurück — nicht auf den Plan, sondern auf sein Erleben. Fünf Fragen, orientiert an den fünf Fingern: Was war gut? Was war wichtig? Was hat gestört? Welche Beziehung war wichtig? Was kam zu kurz? Das dient der Psychohygiene und schafft eine reflektierte Grundlage für alles, was danach kommt.</p>
-          <p style={infoP}><strong>Schritt 2 — Plan-Check (ca. 5 Minuten):</strong> Der Teilnehmer öffnet seinen Kalender und seine Aufgabenliste der vergangenen Woche und beantwortet drei Fragen: Wie gut hat mein Plan zur Realität gepasst? Was war der Grund, wenn etwas nicht stattgefunden hat? Was nehme ich daraus mit? Die App zeigt automatisch die Vorhaben der Vorwoche an, damit der Abgleich konkret bleibt. Eine Selbsteinschätzung auf einer Fünferskala dokumentiert die Planungsqualität über die Zeit.</p>
-          <p style={infoP}><strong>Schritt 3 — Wochenplanung (ca. 15 Minuten):</strong> Screen 3.1 leitet den Teilnehmer an, seinen Stundenplan und seine Aufgabenliste für die kommende Woche zu erstellen — mit konkreten Checklisten als Orientierung. Der Vorsatz aus dem Plan-Check wird als Erinnerung angezeigt. Screen 3.2 hält die Essenz fest: Die drei wichtigsten Vorhaben der Woche, die Haltung, mit der der Teilnehmer in die Woche geht, und worauf er seine Aufmerksamkeit richten will.</p>
-        </Section>
-
-        <Section title="Was über die Wochen wächst">
-          Alle Eingaben werden im Browser lokal gespeichert. Woche für Woche entsteht ein persönliches Lernprotokoll. Die App zeigt ab der dritten abgeschlossenen Woche einen Verlauf der Planumsetzung als einfaches Balkendiagramm. Ein Fortschrittsbalken zählt leise bis zur 12-Wochen-Marke. An passenden Stellen erscheinen kontextbezogene Impulse — zum Beispiel der Hinweis, dass sich Planungsqualität meist erst nach vier bis sechs Wochen stabilisiert, oder dass ab acht Wochen die Routine zur Gewohnheit wird.
-        </Section>
-
-        <Section title="Die wissenschaftliche Grundlage">
-          Das Format basiert auf dem Befund der Trentepohl-Studie (2022), dass regelmäßiges Planen und Reflektieren über einen längeren Zeitraum die einzige Zeitmanagement-Intervention ist, die nachhaltig wirkt — reines Wissen ohne Praxis führt nach einem anfänglichen Fortschritt nicht weiter. Die drei Wirkebenen, die das Programm adressiert — Zufriedenheit, Stressreduktion, Produktivität — sind durch die Meta-Analysen von Aeon et al. (2021) und Bedi & Sass (2023) belegt.
-        </Section>
-
-        <Section title="Technisch">
-          Die App läuft unter routine.so-smart.club. Die Daten der Teilnehmer liegen lokal im Browser (localStorage) — es gibt keine zentrale Datenbank und kein Login. Die Daten können jederzeit exportiert und importiert werden.
-        </Section>
+        <Sec title="Was die App ist">Die 3×3 Wochenroutine ist ein digitaler Begleiter für Zeitmanagement und Selbstführung. Sie führt einmal pro Woche in 30 Minuten durch einen strukturierten Prozess aus Reflexion und Planung.</Sec>
+        <Sec title="Der wöchentliche Ablauf">
+          <p style={ip}>Die Routine besteht aus drei Schritten: Erst die Woche reflektieren und abschließen, dann den Terminplan aktualisieren, dann die Aufgabenliste organisieren.</p>
+          <p style={ip}><strong>Schritt 1 — Die Woche reflektieren (~10 Min):</strong> 5-Finger-Reflexion und Plan-Check. Wie war die Woche? Wie gut hat der Plan zur Realität gepasst?</p>
+          <p style={ip}><strong>Schritt 2 — Den Terminplan aktualisieren (~10 Min):</strong> Mit dem 5-Elemente-Stundenplan die kommende Woche strukturieren: Arbeitszeiten, Pausen, Fixtermine, Kernaktivitäten, Zeitpuffer.</p>
+          <p style={ip}><strong>Schritt 3 — Die Aufgabenliste organisieren (~10 Min):</strong> Nach dem Kanban-Prinzip: Sammeln, Organisieren, Erledigen. Abschluss mit Vorhaben und Haltung für die Woche.</p>
+        </Sec>
+        <Sec title="Die wissenschaftliche Grundlage">Das Format basiert auf dem Befund der Trentepohl-Studie (2022), dass regelmäßiges Planen und Reflektieren die einzige Zeitmanagement-Intervention ist, die nachhaltig wirkt. Belegt durch die Meta-Analysen von Aeon et al. (2021) und Bedi & Sass (2023).</Sec>
+        <Sec title="Technisch">Die Daten liegen lokal im Browser (localStorage) — es gibt keine zentrale Datenbank und kein Login. Die Daten können jederzeit exportiert und importiert werden.</Sec>
       </div>
     </div>
   );
 }
 
-function Section({ title, children }) {
-  return (
-    <div style={{ marginBottom: "24px" }}>
-      <h3 style={{ fontSize: "16px", fontWeight: "600", color: COLORS.darktext, margin: "0 0 8px" }}>{title}</h3>
-      <div style={{ fontSize: "14px", color: COLORS.darktext, lineHeight: "1.7" }}>{children}</div>
-    </div>
-  );
+function Sec({ title, children }) { return <div style={{ marginBottom: "24px" }}><h3 style={{ fontSize: "16px", fontWeight: "600", color: COLORS.darktext, margin: "0 0 8px" }}>{title}</h3><div style={{ fontSize: "14px", color: COLORS.darktext, lineHeight: "1.7" }}>{children}</div></div>; }
+const ip = { fontSize: "14px", color: COLORS.darktext, lineHeight: "1.7", margin: "0 0 12px" };
+
+function BetaBadge() {
+  return <span style={{ display: "inline-block", fontSize: "10px", fontWeight: "700", color: "#fff", backgroundColor: COLORS.beta, padding: "2px 8px", borderRadius: "2px", letterSpacing: "1px", textTransform: "uppercase", fontFamily: "sans-serif", marginLeft: "8px", verticalAlign: "middle", position: "relative", top: "-2px" }}>Beta</span>;
 }
 
-const infoP = { fontSize: "14px", color: COLORS.darktext, lineHeight: "1.7", margin: "0 0 12px" };
-
-// ==================== BETA BADGE ====================
-function BetaBadge() {
+function SmartTipp({ children }) {
   return (
-    <span style={{
-      display: "inline-block",
-      fontSize: "10px",
-      fontWeight: "700",
-      color: "#fff",
-      backgroundColor: COLORS.beta,
-      padding: "2px 8px",
-      borderRadius: "2px",
-      letterSpacing: "1px",
-      textTransform: "uppercase",
-      fontFamily: "sans-serif",
-      marginLeft: "8px",
-      verticalAlign: "middle",
-      position: "relative",
-      top: "-2px",
-    }}>Beta</span>
+    <div style={{ padding: "16px 20px", backgroundColor: COLORS.warm + "30", borderRadius: "3px", borderLeft: `3px solid ${COLORS.warm}`, marginBottom: "20px" }}>
+      <p style={{ fontSize: "12px", color: COLORS.midgray, margin: "0 0 6px", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "sans-serif", fontWeight: "600" }}>Smart Tipp</p>
+      <p style={{ fontSize: "14px", color: COLORS.darktext, lineHeight: "1.6", margin: "0" }}>{children}</p>
+    </div>
   );
 }
 
 // ==================== MAIN APP ====================
 export default function WochenRoutine() {
   const [currentWeek] = useState(getWeekKey());
+  // Steps: -1=welcome, 0=start, 1=finger, 2=plancheck, 3=terminplan, 4=aufgabenliste, 5=vorhaben, 6=done
   const [step, setStep] = useState(-1);
   const [activeFinger, setActiveFinger] = useState(0);
   const [weekData, setWeekData] = useState(null);
@@ -182,21 +136,12 @@ export default function WochenRoutine() {
           const parsed = JSON.parse(result.value);
           setAllWeeks(parsed);
           hasData = Object.keys(parsed).length > 0;
-          if (parsed[currentWeek]) {
-            setWeekData(parsed[currentWeek]);
-          }
+          if (parsed[currentWeek]) setWeekData(parsed[currentWeek]);
           const prevKey = getPreviousWeekKey(currentWeek);
-          if (parsed[prevKey]) {
-            setPreviousWeek(parsed[prevKey]);
-          }
+          if (parsed[prevKey]) setPreviousWeek(parsed[prevKey]);
         }
-      } catch (e) {
-        console.log("No existing data");
-      }
-      if (hasData) {
-        setWelcomeSeen(true);
-        setStep(0);
-      }
+      } catch (e) { console.log("No existing data"); }
+      if (hasData) { setWelcomeSeen(true); setStep(0); }
       setLoading(false);
     }
     load();
@@ -204,185 +149,78 @@ export default function WochenRoutine() {
 
   useEffect(() => {
     if (!timerStart) return;
-    const interval = setInterval(() => {
-      setElapsed(Math.floor((Date.now() - timerStart) / 1000));
-    }, 1000);
+    const interval = setInterval(() => setElapsed(Math.floor((Date.now() - timerStart) / 1000)), 1000);
     return () => clearInterval(interval);
   }, [timerStart]);
 
-  const formatTime = (secs) => {
-    const m = Math.floor(secs / 60);
-    const s = secs % 60;
-    return `${m}:${String(s).padStart(2, "0")}`;
-  };
+  const formatTime = (secs) => `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, "0")}`;
 
   const saveData = useCallback(async (data) => {
     const updated = { ...allWeeks, [currentWeek]: data };
     setAllWeeks(updated);
     setWeekData(data);
-    try {
-      await window.storage.set(STORAGE_KEY, JSON.stringify(updated));
-    } catch (e) {
-      console.error("Save failed:", e);
-    }
+    try { await window.storage.set(STORAGE_KEY, JSON.stringify(updated)); } catch (e) { console.error("Save failed:", e); }
   }, [allWeeks, currentWeek]);
 
   const initWeekData = () => ({
-    weekKey: currentWeek,
-    createdAt: new Date().toISOString(),
+    weekKey: currentWeek, createdAt: new Date().toISOString(),
     fingers: ["", "", "", "", ""],
-    planCheckScore: null,
-    planCheckReason: "",
-    planCheckTakeaway: "",
-    weekGoals: ["", "", ""],
-    weekIntention: "",
-    weekAttention: "",
+    planCheckScore: null, planCheckReason: "", planCheckTakeaway: "",
+    weekGoals: ["", "", ""], weekIntention: "", weekAttention: "",
     completed: false,
   });
 
-  const startRoutine = () => {
-    const data = weekData || initWeekData();
-    setWeekData(data);
-    setStep(1);
-    setTimerStart(Date.now());
-  };
+  const startRoutine = () => { const data = weekData || initWeekData(); setWeekData(data); setStep(1); setTimerStart(Date.now()); };
+  const updateField = (field, value) => setWeekData({ ...weekData, [field]: value });
+  const updateFinger = (i, v) => { const f = [...weekData.fingers]; f[i] = v; updateField("fingers", f); };
+  const updateGoal = (i, v) => { const g = [...weekData.weekGoals]; g[i] = v; updateField("weekGoals", g); };
+  const nextStep = async (to) => { await saveData(weekData); setStep(to); };
+  const finishRoutine = async () => { const final = { ...weekData, completed: true, completedAt: new Date().toISOString(), durationSeconds: elapsed }; await saveData(final); setStep(6); };
+  const getCompletedWeeks = () => Object.entries(allWeeks).filter(([, d]) => d.completed).sort(([a], [b]) => b.localeCompare(a));
 
-  const updateField = (field, value) => {
-    const updated = { ...weekData, [field]: value };
-    setWeekData(updated);
-  };
-
-  const updateFinger = (index, value) => {
-    const fingers = [...weekData.fingers];
-    fingers[index] = value;
-    updateField("fingers", fingers);
-  };
-
-  const updateGoal = (index, value) => {
-    const goals = [...weekData.weekGoals];
-    goals[index] = value;
-    updateField("weekGoals", goals);
-  };
-
-  const nextStep = async () => {
-    await saveData(weekData);
-    setStep(step + 1);
-  };
-
-  const finishRoutine = async () => {
-    const final = { ...weekData, completed: true, completedAt: new Date().toISOString(), durationSeconds: elapsed };
-    await saveData(final);
-    setStep(5);
-  };
-
-  const getCompletedWeeks = () => {
-    return Object.entries(allWeeks)
-      .filter(([, d]) => d.completed)
-      .sort(([a], [b]) => b.localeCompare(a));
-  };
-
-  // ===== EXPORT / IMPORT =====
   const exportData = () => {
-    const dataStr = JSON.stringify(allWeeks, null, 2);
-    const blob = new Blob([dataStr], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(allWeeks, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `wochenroutine-backup-${getWeekKey()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+    const a = document.createElement("a"); a.href = url; a.download = `wochenroutine-backup-${getWeekKey()}.json`; a.click(); URL.revokeObjectURL(url);
   };
 
   const importData = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+    const file = e.target.files[0]; if (!file) return;
     const reader = new FileReader();
     reader.onload = async (ev) => {
       try {
         const imported = JSON.parse(ev.target.result);
         if (typeof imported === "object" && imported !== null) {
-          const merged = { ...allWeeks, ...imported };
-          setAllWeeks(merged);
+          const merged = { ...allWeeks, ...imported }; setAllWeeks(merged);
           if (merged[currentWeek]) setWeekData(merged[currentWeek]);
           await window.storage.set(STORAGE_KEY, JSON.stringify(merged));
           alert("Daten erfolgreich importiert.");
         }
-      } catch (err) {
-        alert("Die Datei konnte nicht gelesen werden.");
-      }
+      } catch { alert("Die Datei konnte nicht gelesen werden."); }
     };
-    reader.readAsText(file);
-    e.target.value = "";
+    reader.readAsText(file); e.target.value = "";
   };
 
-  // ===== INFO PAGE =====
-  if (showInfo) {
-    return (
-      <>
-        <InfoPage onClose={() => setShowInfo(false)} />
-        <AppFooter onShowInfo={() => setShowInfo(true)} />
-      </>
-    );
-  }
+  if (showInfo) return <><InfoPage onClose={() => setShowInfo(false)} /><AppFooter onShowInfo={() => setShowInfo(true)} /></>;
+  if (loading) return <div style={styles.container}><div style={{ ...styles.card, textAlign: "center", padding: "80px 24px" }}><p style={{ color: COLORS.midgray }}>Lädt...</p></div></div>;
 
-  if (loading) {
-    return (
-      <div style={styles.container}>
-        <div style={{ ...styles.card, textAlign: "center", padding: "80px 24px" }}>
-          <p style={{ color: COLORS.midgray }}>Lädt...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // ==================== WELCOME SCREEN ====================
+  // ==================== WELCOME ====================
   if (step === -1) {
     return (
       <>
         <div style={{ ...styles.container, alignItems: "center" }}>
           <div style={{ width: "100%", maxWidth: "440px", textAlign: "center" }}>
-
             <img src="/logo.png" alt="3×3 Business Coaching" style={{ width: "260px", height: "auto", display: "block", margin: "0 auto 48px" }} />
-
-            <h1 style={{ fontSize: "28px", fontWeight: "400", color: COLORS.black, margin: "0", lineHeight: "1.25", letterSpacing: "-0.3px" }}>
-              3×3 Wochenroutine <BetaBadge />
-            </h1>
-
-            <p style={{ fontSize: "16px", color: COLORS.midgray, lineHeight: "1.6", margin: "20px 0 0", whiteSpace: "pre-line", fontFamily: "'Georgia', serif" }}>
-              {"30 Minuten pro Woche.\nAnkommen. Zurückschauen. Vorausplanen."}
-            </p>
-
+            <h1 style={{ fontSize: "28px", fontWeight: "400", color: COLORS.black, margin: "0", lineHeight: "1.25", letterSpacing: "-0.3px" }}>3×3 Wochenroutine <BetaBadge /></h1>
+            <p style={{ fontSize: "16px", color: COLORS.midgray, lineHeight: "1.6", margin: "20px 0 0", whiteSpace: "pre-line", fontFamily: "'Georgia', serif" }}>{"30 Minuten pro Woche.\nReflektieren. Planen. Organisieren."}</p>
             <div style={{ width: "32px", height: "1.5px", backgroundColor: COLORS.warmgray, margin: "40px auto" }} />
-
-            <p style={{ fontSize: "14px", color: COLORS.midgray, lineHeight: "1.7", margin: "0 auto", maxWidth: "340px", fontStyle: "italic", fontFamily: "'Georgia', serif" }}>
-              Du nutzt deine eigenen Tools für Kalender und Aufgaben. Diese App führt dich durch den Prozess.
-            </p>
-
-            {/* Privacy notice */}
-            <div style={{
-              margin: "32px auto 0",
-              maxWidth: "380px",
-              padding: "14px 16px",
-              backgroundColor: COLORS.lightgray,
-              borderRadius: "3px",
-              textAlign: "left",
-            }}>
+            <p style={{ fontSize: "14px", color: COLORS.midgray, lineHeight: "1.7", margin: "0 auto", maxWidth: "340px", fontStyle: "italic", fontFamily: "'Georgia', serif" }}>Du nutzt deine eigenen Tools für Kalender und Aufgaben. Diese App führt dich durch den Prozess.</p>
+            <div style={{ margin: "32px auto 0", maxWidth: "380px", padding: "14px 16px", backgroundColor: COLORS.lightgray, borderRadius: "3px", textAlign: "left" }}>
               <p style={{ fontSize: "12px", color: COLORS.midgray, lineHeight: "1.6", margin: "0" }}>
-                <strong style={{ color: COLORS.darktext }}>Datenschutz:</strong> Deine Daten werden ausschließlich lokal in deinem Browser gespeichert (localStorage). Es werden keine Daten an Server oder Dritte übermittelt. Es gibt kein Tracking und keine Cookies. Mehr dazu in unserer{" "}
-                <a href="https://www.so-smart.club/datenschutz" target="_blank" rel="noopener noreferrer" style={{ color: COLORS.primary }}>Datenschutzerklärung</a>.
+                <strong style={{ color: COLORS.darktext }}>Datenschutz:</strong> Deine Daten werden ausschließlich lokal in deinem Browser gespeichert. Es werden keine Daten an Server oder Dritte übermittelt. Kein Tracking, keine Cookies. <a href="https://www.so-smart.club/datenschutz" target="_blank" rel="noopener noreferrer" style={{ color: COLORS.primary }}>Mehr erfahren</a>.
               </p>
             </div>
-
-            <button onClick={() => { setWelcomeSeen(true); setStep(0); }} style={{
-              ...styles.primaryBtn,
-              marginTop: "32px",
-              maxWidth: "280px",
-              marginLeft: "auto",
-              marginRight: "auto",
-            }}>
-              Starten
-            </button>
-
+            <button onClick={() => { setWelcomeSeen(true); setStep(0); }} style={{ ...styles.primaryBtn, marginTop: "32px", maxWidth: "280px", marginLeft: "auto", marginRight: "auto" }}>Starten</button>
           </div>
         </div>
         <AppFooter onShowInfo={() => setShowInfo(true)} />
@@ -390,72 +228,41 @@ export default function WochenRoutine() {
     );
   }
 
-  // ==================== START SCREEN ====================
+  // ==================== START ====================
   if (step === 0) {
     const alreadyDone = weekData?.completed;
     const completedCount = getCompletedWeeks().length;
-
     return (
       <>
         <div style={styles.container}>
           <div style={styles.card}>
             <div style={styles.topBar}>
               <span style={styles.weekLabel}>{getWeekLabel(currentWeek)}</span>
-              <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-                {completedCount > 0 && (
-                  <button onClick={() => setHistoryOpen(!historyOpen)} style={styles.historyBtn}>
-                    {historyOpen ? "Schließen" : `Verlauf (${completedCount})`}
-                  </button>
-                )}
-              </div>
+              {completedCount > 0 && <button onClick={() => setHistoryOpen(!historyOpen)} style={styles.historyBtn}>{historyOpen ? "Schließen" : `Verlauf (${completedCount})`}</button>}
             </div>
-
-            {historyOpen ? (
-              <HistoryView weeks={allWeeks} onClose={() => setHistoryOpen(false)} />
-            ) : (
+            {historyOpen ? <HistoryView weeks={allWeeks} /> : (
               <>
                 <div style={styles.heroSection}>
                   <h1 style={styles.heroTitle}>3×3 Wochenroutine <BetaBadge /></h1>
-                  <p style={styles.heroSub}>
-                    30 Minuten für deine Woche.{"\n"}Ankommen. Zurückschauen. Vorausplanen.
-                  </p>
+                  <p style={styles.heroSub}>{"30 Minuten für deine Woche.\nReflektieren. Planen. Organisieren."}</p>
                 </div>
-
                 <div style={styles.stepsPreview}>
-                  <StepPreview num="1" title="5-Finger-Reflexion" time="~7 Min" desc="Wie war meine Woche?" />
-                  <StepPreview num="2" title="Plan-Check" time="~5 Min" desc="Was habe ich umgesetzt?" />
-                  <StepPreview num="3" title="Wochenplanung" time="~15 Min" desc="Was nehme ich mir vor?" />
+                  <StepPreview num="1" title="Die Woche reflektieren" time="~10 Min" desc="Rückblick und Abschluss" />
+                  <StepPreview num="2" title="Den Terminplan aktualisieren" time="~10 Min" desc="Stundenplan für die neue Woche" />
+                  <StepPreview num="3" title="Die Aufgabenliste organisieren" time="~10 Min" desc="Aufgaben ordnen, Haltung setzen" />
                 </div>
-
                 {alreadyDone ? (
                   <div style={{ textAlign: "center", padding: "20px 0" }}>
-                    <div style={{ ...styles.badge, backgroundColor: COLORS.accent, color: COLORS.black }}>
-                      ✓ Diese Woche abgeschlossen
-                    </div>
+                    <div style={{ ...styles.badge, backgroundColor: COLORS.accent, color: COLORS.black }}>✓ Diese Woche abgeschlossen</div>
                     <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "16px" }}>
                       <button onClick={() => { setStep(1); setTimerStart(Date.now()); }} style={styles.secondaryBtn}>Nochmal anschauen</button>
-                      <button onClick={() => { const fresh = initWeekData(); setWeekData(fresh); setStep(1); setTimerStart(Date.now()); setElapsed(0); }} style={styles.secondaryBtn}>Neu starten</button>
+                      <button onClick={() => { setWeekData(initWeekData()); setStep(1); setTimerStart(Date.now()); setElapsed(0); }} style={styles.secondaryBtn}>Neu starten</button>
                     </div>
                   </div>
-                ) : (
-                  <button onClick={startRoutine} style={styles.primaryBtn}>
-                    {weekData ? "Fortsetzen" : "Routine starten"}
-                  </button>
-                )}
-
+                ) : <button onClick={startRoutine} style={styles.primaryBtn}>{weekData ? "Fortsetzen" : "Routine starten"}</button>}
                 {completedCount >= 3 && !historyOpen && (
-                  <div style={styles.impulse}>
-                    <p style={styles.impulseText}>
-                      {completedCount >= 8
-                        ? "Zwei Monate regelmäßige Praxis. Die Forschung zeigt: Ab hier wird die Routine zur Gewohnheit."
-                        : completedCount >= 4
-                        ? "Schau dir deine Rückblicke der letzten Wochen an. Erkennst du ein Muster?"
-                        : "Die Forschung zeigt, dass sich Planungsqualität meist erst nach vier bis sechs Wochen stabilisiert. Du bist auf dem Weg."}
-                    </p>
-                  </div>
+                  <div style={styles.impulse}><p style={styles.impulseText}>{completedCount >= 8 ? "Zwei Monate regelmäßige Praxis. Die Forschung zeigt: Ab hier wird die Routine zur Gewohnheit." : completedCount >= 4 ? "Schau dir deine Rückblicke der letzten Wochen an. Erkennst du ein Muster?" : "Die Forschung zeigt, dass sich Planungsqualität meist erst nach vier bis sechs Wochen stabilisiert. Du bist auf dem Weg."}</p></div>
                 )}
-
-                {/* Export / Import */}
                 {completedCount > 0 && (
                   <div style={{ marginTop: "24px", borderTop: `1px solid ${COLORS.lightgray}`, paddingTop: "16px" }}>
                     <div style={{ display: "flex", gap: "12px", justifyContent: "center" }}>
@@ -463,9 +270,7 @@ export default function WochenRoutine() {
                       <button onClick={() => fileInputRef.current?.click()} style={{ ...styles.secondaryBtn, fontSize: "12px", padding: "8px 16px" }}>Daten importieren</button>
                       <input ref={fileInputRef} type="file" accept=".json" onChange={importData} style={{ display: "none" }} />
                     </div>
-                    <p style={{ fontSize: "11px", color: COLORS.midgray, textAlign: "center", marginTop: "8px" }}>
-                      Sichere deine Daten als Backup oder übertrage sie auf ein anderes Gerät.
-                    </p>
+                    <p style={{ fontSize: "11px", color: COLORS.midgray, textAlign: "center", marginTop: "8px" }}>Sichere deine Daten als Backup oder übertrage sie auf ein anderes Gerät.</p>
                   </div>
                 )}
               </>
@@ -477,211 +282,226 @@ export default function WochenRoutine() {
     );
   }
 
-  // ==================== STEP 1: 5-FINGER ====================
+  // ==================== STEP 1a: 5-FINGER ====================
   if (step === 1) {
     const current = FINGER_LABELS[activeFinger];
     return (
-      <div style={styles.container}>
-        <div style={styles.card}>
-          <StepHeader step={1} title="5-Finger-Reflexion" timeHint="~7 Minuten" elapsed={elapsed} formatTime={formatTime} />
-          <p style={styles.stepIntro}>Schau auf deine vergangene Woche. Nicht auf den Plan — auf dein Erleben.</p>
-          <div style={styles.fingerTabs}>
-            {FINGER_LABELS.map((f, i) => (
-              <button key={i} onClick={() => setActiveFinger(i)} style={{
-                ...styles.fingerTab,
-                backgroundColor: activeFinger === i ? COLORS.primary : "transparent",
-                color: activeFinger === i ? "#fff" : COLORS.midgray,
-                borderColor: activeFinger === i ? COLORS.primary : COLORS.warmgray,
-              }}>
-                <span style={{ fontSize: "18px" }}>{f.icon}</span>
-              </button>
-            ))}
-          </div>
-          <div style={styles.fingerContent} key={activeFinger}>
-            <h3 style={styles.fingerTitle}>{current.finger}</h3>
-            <p style={styles.fingerPrompt}>{current.prompt}</p>
-            <textarea value={weekData.fingers[activeFinger]} onChange={(e) => updateFinger(activeFinger, e.target.value)} placeholder="Ein paar Worte oder Stichpunkte..." style={styles.textarea} rows={3} />
-          </div>
-          <div style={styles.fingerNav}>
-            {activeFinger > 0 && <button onClick={() => setActiveFinger(activeFinger - 1)} style={styles.secondaryBtn}>Zurück</button>}
-            <div style={{ flex: 1 }} />
-            {activeFinger < 4 ? (
-              <button onClick={() => setActiveFinger(activeFinger + 1)} style={styles.primaryBtnSmall}>Weiter</button>
-            ) : (
-              <button onClick={nextStep} style={styles.primaryBtnSmall}>Zum Plan-Check →</button>
-            )}
-          </div>
+      <div style={styles.container}><div style={styles.card}>
+        <StepHeader step="1" title="Die Woche reflektieren" timeHint="5-Finger-Reflexion · ~7 Min" elapsed={elapsed} formatTime={formatTime} />
+        <p style={styles.stepIntro}>Schau auf deine vergangene Woche. Nicht auf den Plan — auf dein Erleben.</p>
+        <div style={styles.fingerTabs}>
+          {FINGER_LABELS.map((f, i) => (
+            <button key={i} onClick={() => setActiveFinger(i)} style={{ ...styles.fingerTab, backgroundColor: activeFinger === i ? COLORS.primary : "transparent", color: activeFinger === i ? "#fff" : COLORS.midgray, borderColor: activeFinger === i ? COLORS.primary : COLORS.warmgray }}>
+              <span style={{ fontSize: "18px" }}>{f.icon}</span>
+            </button>
+          ))}
         </div>
-      </div>
+        <div style={styles.fingerContent} key={activeFinger}>
+          <h3 style={styles.fingerTitle}>{current.finger}</h3>
+          <p style={styles.fingerPrompt}>{current.prompt}</p>
+          <textarea value={weekData.fingers[activeFinger]} onChange={(e) => updateFinger(activeFinger, e.target.value)} placeholder="Ein paar Worte oder Stichpunkte..." style={styles.textarea} rows={3} />
+        </div>
+        <div style={styles.fingerNav}>
+          {activeFinger > 0 && <button onClick={() => setActiveFinger(activeFinger - 1)} style={styles.secondaryBtn}>Zurück</button>}
+          <div style={{ flex: 1 }} />
+          {activeFinger < 4 ? <button onClick={() => setActiveFinger(activeFinger + 1)} style={styles.primaryBtnSmall}>Weiter</button>
+            : <button onClick={() => nextStep(2)} style={styles.primaryBtnSmall}>Zum Plan-Check →</button>}
+        </div>
+      </div></div>
     );
   }
 
-  // ==================== STEP 2: PLAN-CHECK ====================
+  // ==================== STEP 1b: PLAN-CHECK ====================
   if (step === 2) {
     const hasPrevious = previousWeek?.completed;
     return (
-      <div style={styles.container}>
-        <div style={styles.card}>
-          <StepHeader step={2} title="Plan-Check" timeHint="~5 Minuten" elapsed={elapsed} formatTime={formatTime} />
-          <p style={styles.stepIntro}>Öffne deinen Kalender / Wochenplan und deine ToDo-Liste der letzten Woche. Schau kurz drauf — und beantworte dann diese Fragen.</p>
-          {hasPrevious && previousWeek.weekGoals?.some(g => g) && (
-            <div style={styles.prevGoals}>
-              <p style={styles.prevGoalsLabel}>Deine Vorhaben letzte Woche:</p>
-              {previousWeek.weekGoals.filter(g => g).map((g, i) => <p key={i} style={styles.prevGoalItem}>→ {g}</p>)}
-            </div>
-          )}
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Wie gut hat dein Plan (Termine und Aufgaben) zur Realität gepasst?</label>
-            <div style={styles.scaleRow}>
-              {PLAN_SCALE.map((s) => (
-                <button key={s.value} onClick={() => updateField("planCheckScore", s.value)} style={{
-                  ...styles.scaleBtn,
-                  backgroundColor: weekData.planCheckScore === s.value ? COLORS.primary : COLORS.lightgray,
-                  color: weekData.planCheckScore === s.value ? "#fff" : COLORS.darktext,
-                }}>
-                  <span style={{ fontSize: "16px", fontWeight: "500" }}>{s.value}</span>
-                  <span style={{ fontSize: "11px", marginTop: "2px" }}>{s.label}</span>
-                </button>
-              ))}
-            </div>
+      <div style={styles.container}><div style={styles.card}>
+        <StepHeader step="1" title="Die Woche reflektieren" timeHint="Plan-Check · ~3 Min" elapsed={elapsed} formatTime={formatTime} />
+        <p style={styles.stepIntro}>Öffne deinen Kalender / Wochenplan und deine ToDo-Liste der letzten Woche. Schau kurz drauf — und beantworte dann diese Fragen.</p>
+        {hasPrevious && previousWeek.weekGoals?.some(g => g) && (
+          <div style={styles.prevGoals}>
+            <p style={styles.prevGoalsLabel}>Deine Vorhaben letzte Woche:</p>
+            {previousWeek.weekGoals.filter(g => g).map((g, i) => <p key={i} style={styles.prevGoalItem}>→ {g}</p>)}
           </div>
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Was war der Grund, wenn etwas nicht stattgefunden hat?</label>
-            <textarea value={weekData.planCheckReason} onChange={(e) => updateField("planCheckReason", e.target.value)} placeholder="Bewusste Entscheidung? Externer Einfluss? Überplant?" style={styles.textarea} rows={3} />
-          </div>
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Was nimmst du daraus für die kommende Woche mit?</label>
-            <textarea value={weekData.planCheckTakeaway} onChange={(e) => updateField("planCheckTakeaway", e.target.value)} placeholder="Eine Sache, die du anpassen möchtest..." style={styles.textarea} rows={2} />
-          </div>
-          <div style={styles.fingerNav}>
-            <button onClick={() => setStep(1)} style={styles.secondaryBtn}>Zurück</button>
-            <div style={{ flex: 1 }} />
-            <button onClick={nextStep} style={styles.primaryBtnSmall}>Zur Wochenplanung →</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ==================== STEP 3: PLANUNG 3.1 ====================
-  if (step === 3) {
-    return (
-      <div style={styles.container}>
-        <div style={styles.card}>
-          <StepHeader step={"3.1"} title="Wochenplanung" timeHint="~15 Minuten" elapsed={elapsed} formatTime={formatTime} />
-          {weekData.planCheckTakeaway && (
-            <div style={styles.reminder}>
-              <p style={styles.reminderLabel}>Dein Vorsatz aus dem Plan-Check:</p>
-              <p style={styles.reminderText}>„{weekData.planCheckTakeaway}"</p>
-            </div>
-          )}
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Öffne jetzt deinen Kalender und erstelle deinen Stundenplan für nächste Woche:</label>
-            <div style={styles.checklist}>
-              <p style={styles.checkItem}>○ Lege deine Arbeitszeiten fest</p>
-              <p style={styles.checkItem}>○ Plane Pausen und Freizeitaktivitäten</p>
-              <p style={styles.checkItem}>○ Trage Zeitblöcke für Fixtermine und Kernaktivitäten ein</p>
-              <p style={styles.checkItem}>○ Plane Zeitpuffer am Ende des Tages</p>
-            </div>
-          </div>
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Aktualisiere und organisiere deine Aufgabenliste für nächste Woche:</label>
-            <div style={styles.checklist}>
-              <p style={styles.checkItem}>○ Lösche oder delegiere, was nicht mehr relevant ist</p>
-              <p style={styles.checkItem}>○ Achte auf selbsterklärende Formulierungen der Aufgaben</p>
-              <p style={styles.checkItem}>○ Weise den Aufgaben konkrete Zeitabschätzungen zu</p>
-            </div>
-          </div>
-          <div style={styles.fingerNav}>
-            <button onClick={() => setStep(2)} style={styles.secondaryBtn}>Zurück</button>
-            <div style={{ flex: 1 }} />
-            <button onClick={() => setStep(4)} style={styles.primaryBtnSmall}>Weiter →</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ==================== STEP 4: PLANUNG 3.2 ====================
-  if (step === 4) {
-    return (
-      <div style={styles.container}>
-        <div style={styles.card}>
-          <StepHeader step={"3.2"} title="Vorhaben & Haltung" timeHint="" elapsed={elapsed} formatTime={formatTime} />
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Meine drei wichtigsten Vorhaben diese Woche:</label>
-            {[0, 1, 2].map((i) => (
-              <div key={i} style={styles.goalRow}>
-                <span style={styles.goalNum}>{i + 1}</span>
-                <input value={weekData.weekGoals[i]} onChange={(e) => updateGoal(i, e.target.value)} placeholder={i === 0 ? "Das Wichtigste..." : i === 1 ? "Außerdem..." : "Und wenn möglich..."} style={styles.goalInput} />
-              </div>
+        )}
+        <div style={styles.fieldGroup}>
+          <label style={styles.label}>Wie gut hat dein Plan (Termine und Aufgaben) zur Realität gepasst?</label>
+          <div style={styles.scaleRow}>
+            {PLAN_SCALE.map((s) => (
+              <button key={s.value} onClick={() => updateField("planCheckScore", s.value)} style={{ ...styles.scaleBtn, backgroundColor: weekData.planCheckScore === s.value ? COLORS.primary : COLORS.lightgray, color: weekData.planCheckScore === s.value ? "#fff" : COLORS.darktext }}>
+                <span style={{ fontSize: "16px", fontWeight: "500" }}>{s.value}</span>
+                <span style={{ fontSize: "10px", marginTop: "2px" }}>{s.label}</span>
+              </button>
             ))}
           </div>
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Mit welcher Haltung gehe ich in diese Woche?</label>
-            <textarea value={weekData.weekIntention} onChange={(e) => updateField("weekIntention", e.target.value)} placeholder="Ein Satz, der dich durch die Woche begleitet..." style={styles.textarea} rows={2} />
-          </div>
-          <div style={styles.fieldGroup}>
-            <label style={styles.label}>Worauf will ich meine Aufmerksamkeit richten?</label>
-            <textarea value={weekData.weekAttention} onChange={(e) => updateField("weekAttention", e.target.value)} placeholder="Was soll diese Woche meine besondere Beachtung bekommen?" style={styles.textarea} rows={2} />
-          </div>
-          <div style={styles.fingerNav}>
-            <button onClick={() => setStep(3)} style={styles.secondaryBtn}>Zurück</button>
-            <div style={{ flex: 1 }} />
-            <button onClick={finishRoutine} style={styles.primaryBtnSmall}>Routine abschließen ✓</button>
-          </div>
         </div>
-      </div>
+        <div style={styles.fieldGroup}>
+          <label style={styles.label}>Was war der Grund, wenn etwas nicht stattgefunden hat?</label>
+          <textarea value={weekData.planCheckReason} onChange={(e) => updateField("planCheckReason", e.target.value)} placeholder="Bewusste Entscheidung? Externer Einfluss? Überplant?" style={styles.textarea} rows={3} />
+        </div>
+        <div style={styles.fieldGroup}>
+          <label style={styles.label}>Was nimmst du daraus für die kommende Woche mit?</label>
+          <textarea value={weekData.planCheckTakeaway} onChange={(e) => updateField("planCheckTakeaway", e.target.value)} placeholder="Eine Sache, die du anpassen möchtest..." style={styles.textarea} rows={2} />
+        </div>
+        <div style={styles.fingerNav}>
+          <button onClick={() => setStep(1)} style={styles.secondaryBtn}>Zurück</button>
+          <div style={{ flex: 1 }} />
+          <button onClick={() => nextStep(3)} style={styles.primaryBtnSmall}>Zum Terminplan →</button>
+        </div>
+      </div></div>
     );
   }
 
-  // ==================== STEP 5: DONE ====================
+  // ==================== STEP 2: TERMINPLAN AKTUALISIEREN ====================
+  if (step === 3) {
+    return (
+      <div style={styles.container}><div style={styles.card}>
+        <StepHeader step="2" title="Den Terminplan aktualisieren" timeHint="~10 Minuten" elapsed={elapsed} formatTime={formatTime} />
+
+        {weekData.planCheckTakeaway && (
+          <div style={styles.reminder}>
+            <p style={styles.reminderLabel}>Dein Vorsatz aus dem Plan-Check:</p>
+            <p style={styles.reminderText}>„{weekData.planCheckTakeaway}"</p>
+          </div>
+        )}
+
+        <p style={styles.stepIntro}>Öffne deinen Kalender und aktualisiere deinen Stundenplan für die nächste Woche. Ein guter Wochenplan berücksichtigt fünf Elemente:</p>
+
+        <div style={styles.checklist}>
+          <p style={styles.checkItem}><strong style={{ color: COLORS.primary }}>1.</strong> <strong>Arbeitszeiten</strong> — wann beginnt dein Tag, wann endet er</p>
+          <p style={styles.checkItem}><strong style={{ color: COLORS.primary }}>2.</strong> <strong>Pausen und Freizeit</strong> — bewusst eingeplant, nicht als Restposten</p>
+          <p style={styles.checkItem}><strong style={{ color: COLORS.primary }}>3.</strong> <strong>Fixtermine</strong> — Besprechungen, Verpflichtungen</p>
+          <p style={styles.checkItem}><strong style={{ color: COLORS.primary }}>4.</strong> <strong>Kernaktivitäten</strong> — feste Zeitblöcke für deine wichtigsten Tätigkeiten</p>
+          <p style={{ ...styles.checkItem, borderTop: `1px solid ${COLORS.warmgray}`, paddingTop: "8px", marginTop: "8px" }}><strong style={{ color: COLORS.primary }}>5.</strong> <strong>Zeitpuffer</strong> — mindestens eine Stunde pro Tag unverplant lassen</p>
+        </div>
+
+        <SmartTipp>
+          Bau dir einmal einen 5-Elemente-Stundenplan für deine typische Woche. Im Rahmen der Wochenplanung passt du ihn nur noch an — du musst die Woche nicht jedes Mal neu erfinden.
+        </SmartTipp>
+
+        <p style={{ fontSize: "14px", color: COLORS.midgray, lineHeight: "1.6", margin: "0 0 0", fontStyle: "italic" }}>
+          Das Ergebnis: dein Terminplan für die nächste Woche.
+        </p>
+
+        <div style={styles.fingerNav}>
+          <button onClick={() => setStep(2)} style={styles.secondaryBtn}>Zurück</button>
+          <div style={{ flex: 1 }} />
+          <button onClick={() => nextStep(4)} style={styles.primaryBtnSmall}>Zur Aufgabenliste →</button>
+        </div>
+      </div></div>
+    );
+  }
+
+  // ==================== STEP 3a: AUFGABENLISTE ORGANISIEREN ====================
+  if (step === 4) {
+    return (
+      <div style={styles.container}><div style={styles.card}>
+        <StepHeader step="3" title="Die Aufgabenliste organisieren" timeHint="~10 Minuten" elapsed={elapsed} formatTime={formatTime} />
+
+        <p style={styles.stepIntro}>Wie deine Termine einen fixen Platz haben — den Kalender — so brauchen auch deine Aufgaben einen fixen Ort. Organisiere deine Aufgabenliste nach dem Kanban-Prinzip mit drei Spalten:</p>
+
+        <div style={{ display: "flex", gap: "8px", marginBottom: "20px", flexWrap: "wrap" }}>
+          <div style={{ flex: 1, minWidth: "130px", padding: "14px 12px", backgroundColor: COLORS.lightgray, borderRadius: "3px", borderTop: `3px solid ${COLORS.midgray}` }}>
+            <p style={{ fontSize: "12px", color: COLORS.midgray, margin: "0 0 4px", fontWeight: "600", fontFamily: "sans-serif" }}>Aufgabenspeicher</p>
+            <p style={{ fontSize: "12px", color: COLORS.darktext, margin: "0", lineHeight: "1.5" }}>Alles was anfällt, landet zuerst hier.</p>
+          </div>
+          <div style={{ flex: 1, minWidth: "130px", padding: "14px 12px", backgroundColor: COLORS.lightgray, borderRadius: "3px", borderTop: `3px solid ${COLORS.primary}` }}>
+            <p style={{ fontSize: "12px", color: COLORS.primary, margin: "0 0 4px", fontWeight: "600", fontFamily: "sans-serif" }}>Diese Woche</p>
+            <p style={{ fontSize: "12px", color: COLORS.darktext, margin: "0", lineHeight: "1.5" }}>Was du diese Woche erledigen willst.</p>
+          </div>
+          <div style={{ flex: 1, minWidth: "130px", padding: "14px 12px", backgroundColor: COLORS.lightgray, borderRadius: "3px", borderTop: `3px solid ${COLORS.accent}` }}>
+            <p style={{ fontSize: "12px", color: COLORS.darktext, margin: "0 0 4px", fontWeight: "600", fontFamily: "sans-serif" }}>Heute</p>
+            <p style={{ fontSize: "12px", color: COLORS.darktext, margin: "0", lineHeight: "1.5" }}>Was heute dran ist. Nicht mehr.</p>
+          </div>
+        </div>
+
+        <div style={styles.checklist}>
+          <p style={{ fontSize: "13px", color: COLORS.midgray, margin: "0 0 8px", fontWeight: "600" }}>Jetzt in deinem Tool:</p>
+          <p style={styles.checkItem}>○ Lösche oder delegiere, was nicht mehr relevant ist</p>
+          <p style={styles.checkItem}>○ Achte auf selbsterklärende Formulierungen</p>
+          <p style={styles.checkItem}>○ Weise den Aufgaben konkrete Zeitabschätzungen zu</p>
+          <p style={styles.checkItem}>○ Verschiebe Aufgaben in die Spalte „Diese Woche"</p>
+        </div>
+
+        <SmartTipp>
+          Collect — Organize — Do: Zuerst sammeln, dann organisieren, dann erledigen. Die Aufgaben wandern Schritt für Schritt von links nach rechts.
+        </SmartTipp>
+
+        <p style={{ fontSize: "14px", color: COLORS.midgray, lineHeight: "1.6", margin: "0", fontStyle: "italic" }}>
+          Das Ergebnis: eine übersichtliche Liste — geordnet nach Woche und Tag, bereit zur Umsetzung.
+        </p>
+
+        <div style={styles.fingerNav}>
+          <button onClick={() => setStep(3)} style={styles.secondaryBtn}>Zurück</button>
+          <div style={{ flex: 1 }} />
+          <button onClick={() => nextStep(5)} style={styles.primaryBtnSmall}>Vorhaben & Haltung →</button>
+        </div>
+      </div></div>
+    );
+  }
+
+  // ==================== STEP 3b: VORHABEN & HALTUNG ====================
   if (step === 5) {
+    return (
+      <div style={styles.container}><div style={styles.card}>
+        <StepHeader step="3" title="Vorhaben & Haltung" timeHint="" elapsed={elapsed} formatTime={formatTime} />
+        <div style={styles.fieldGroup}>
+          <label style={styles.label}>Meine drei wichtigsten Vorhaben diese Woche:</label>
+          {[0, 1, 2].map((i) => (
+            <div key={i} style={styles.goalRow}>
+              <span style={styles.goalNum}>{i + 1}</span>
+              <input value={weekData.weekGoals[i]} onChange={(e) => updateGoal(i, e.target.value)} placeholder={i === 0 ? "Das Wichtigste..." : i === 1 ? "Außerdem..." : "Und wenn möglich..."} style={styles.goalInput} />
+            </div>
+          ))}
+        </div>
+        <div style={styles.fieldGroup}>
+          <label style={styles.label}>Mit welcher Haltung gehe ich in diese Woche?</label>
+          <textarea value={weekData.weekIntention} onChange={(e) => updateField("weekIntention", e.target.value)} placeholder="Ein Satz, der dich durch die Woche begleitet..." style={styles.textarea} rows={2} />
+        </div>
+        <div style={styles.fieldGroup}>
+          <label style={styles.label}>Worauf will ich meine Aufmerksamkeit richten?</label>
+          <textarea value={weekData.weekAttention} onChange={(e) => updateField("weekAttention", e.target.value)} placeholder="Was soll diese Woche meine besondere Beachtung bekommen?" style={styles.textarea} rows={2} />
+        </div>
+        <div style={styles.fingerNav}>
+          <button onClick={() => setStep(4)} style={styles.secondaryBtn}>Zurück</button>
+          <div style={{ flex: 1 }} />
+          <button onClick={finishRoutine} style={styles.primaryBtnSmall}>Routine abschließen ✓</button>
+        </div>
+      </div></div>
+    );
+  }
+
+  // ==================== DONE ====================
+  if (step === 6) {
     const count = getCompletedWeeks().length;
     return (
       <>
-        <div style={styles.container}>
-          <div style={styles.card}>
-            <div style={styles.doneSection}>
-              <div style={styles.doneCheck}>✓</div>
-              <h2 style={styles.doneTitle}>Woche geplant.</h2>
-              <p style={styles.doneTime}>{formatTime(elapsed)} Minuten</p>
-              {weekData.weekGoals.filter(g => g).length > 0 && (
-                <div style={styles.doneSummary}>
-                  <p style={styles.doneSummaryLabel}>Deine Vorhaben:</p>
-                  {weekData.weekGoals.filter(g => g).map((g, i) => <p key={i} style={styles.doneSummaryItem}>{i + 1}. {g}</p>)}
-                </div>
-              )}
-              {weekData.weekIntention && (
-                <div style={styles.doneIntention}>
-                  <p style={styles.doneIntentionText}>„{weekData.weekIntention}"</p>
-                </div>
-              )}
-              {weekData.weekAttention && (
-                <div style={{ ...styles.doneIntention, borderLeft: `3px solid ${COLORS.warm}` }}>
-                  <p style={{ ...styles.doneIntentionText, fontStyle: "normal" }}>
-                    <span style={{ fontSize: "12px", color: COLORS.midgray, display: "block", marginBottom: "4px", fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: "0.5px" }}>Meine Aufmerksamkeit:</span>
-                    {weekData.weekAttention}
-                  </p>
-                </div>
-              )}
-              <div style={styles.doneProgress}>
-                <p style={styles.doneProgressText}>
-                  {count === 1 ? "Erste Woche geschafft. Der Anfang ist gemacht."
-                    : count < 4 ? `${count} Wochen. Die Routine beginnt sich zu formen.`
-                    : count < 8 ? `${count} Wochen. Du bist mittendrin.`
-                    : count < 12 ? `${count} Wochen. Die Forschung zeigt: Hier wird aus Praxis Gewohnheit.`
-                    : `${count} Wochen. Das ist nachhaltige Veränderung.`}
-                </p>
-                <div style={styles.progressBar}>
-                  <div style={{ ...styles.progressFill, width: `${Math.min(100, (count / 12) * 100)}%` }} />
-                </div>
-                <div style={styles.progressLabels}><span>Start</span><span>12 Wochen</span></div>
-              </div>
-              <button onClick={() => { setStep(0); setTimerStart(null); setElapsed(0); }} style={styles.secondaryBtn}>Zurück zur Übersicht</button>
+        <div style={styles.container}><div style={styles.card}><div style={styles.doneSection}>
+          <div style={styles.doneCheck}>✓</div>
+          <h2 style={styles.doneTitle}>Woche geplant.</h2>
+          <p style={styles.doneTime}>{formatTime(elapsed)} Minuten</p>
+          {weekData.weekGoals.filter(g => g).length > 0 && (
+            <div style={styles.doneSummary}>
+              <p style={styles.doneSummaryLabel}>Deine Vorhaben:</p>
+              {weekData.weekGoals.filter(g => g).map((g, i) => <p key={i} style={styles.doneSummaryItem}>{i + 1}. {g}</p>)}
             </div>
+          )}
+          {weekData.weekIntention && <div style={styles.doneIntention}><p style={styles.doneIntentionText}>„{weekData.weekIntention}"</p></div>}
+          {weekData.weekAttention && (
+            <div style={{ ...styles.doneIntention, borderLeft: `3px solid ${COLORS.warm}` }}>
+              <p style={{ ...styles.doneIntentionText, fontStyle: "normal" }}>
+                <span style={{ fontSize: "12px", color: COLORS.midgray, display: "block", marginBottom: "4px", fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: "0.5px" }}>Meine Aufmerksamkeit:</span>
+                {weekData.weekAttention}
+              </p>
+            </div>
+          )}
+          <div style={styles.doneProgress}>
+            <p style={styles.doneProgressText}>{count === 1 ? "Erste Woche geschafft. Der Anfang ist gemacht." : count < 4 ? `${count} Wochen. Die Routine beginnt sich zu formen.` : count < 8 ? `${count} Wochen. Du bist mittendrin.` : count < 12 ? `${count} Wochen. Hier wird aus Praxis Gewohnheit.` : `${count} Wochen. Das ist nachhaltige Veränderung.`}</p>
+            <div style={styles.progressBar}><div style={{ ...styles.progressFill, width: `${Math.min(100, (count / 12) * 100)}%` }} /></div>
+            <div style={styles.progressLabels}><span>Start</span><span>12 Wochen</span></div>
           </div>
-        </div>
+          <button onClick={() => { setStep(0); setTimerStart(null); setElapsed(0); }} style={styles.secondaryBtn}>Zurück zur Übersicht</button>
+        </div></div></div>
         <AppFooter onShowInfo={() => setShowInfo(true)} />
       </>
     );
@@ -690,7 +510,7 @@ export default function WochenRoutine() {
   return null;
 }
 
-// ==================== HELPER COMPONENTS ====================
+// ==================== HELPERS ====================
 function StepHeader({ step, title, timeHint, elapsed, formatTime }) {
   return (
     <div style={styles.stepHeader}>
@@ -708,10 +528,7 @@ function StepPreview({ num, title, time, desc }) {
   return (
     <div style={styles.stepPreviewItem}>
       <div style={styles.stepPreviewNum}>{num}</div>
-      <div>
-        <p style={styles.stepPreviewTitle}>{title}</p>
-        <p style={styles.stepPreviewDesc}>{desc} · {time}</p>
-      </div>
+      <div><p style={styles.stepPreviewTitle}>{title}</p><p style={styles.stepPreviewDesc}>{desc} · {time}</p></div>
     </div>
   );
 }
@@ -741,11 +558,7 @@ function HistoryView({ weeks }) {
             <span style={styles.historyWeek}>{getWeekLabel(key)}</span>
             {d.planCheckScore && <span style={styles.historyScore}>Plan: {d.planCheckScore}/5</span>}
           </div>
-          {d.weekGoals?.filter(g => g).length > 0 && (
-            <div style={{ marginTop: "8px" }}>
-              {d.weekGoals.filter(g => g).map((g, i) => <p key={i} style={styles.historyGoal}>→ {g}</p>)}
-            </div>
-          )}
+          {d.weekGoals?.filter(g => g).length > 0 && <div style={{ marginTop: "8px" }}>{d.weekGoals.filter(g => g).map((g, i) => <p key={i} style={styles.historyGoal}>→ {g}</p>)}</div>}
           {d.weekIntention && <p style={styles.historyIntention}>„{d.weekIntention}"</p>}
         </div>
       ))}
@@ -799,7 +612,7 @@ const styles = {
   reminder: { padding: "16px", backgroundColor: COLORS.lightgray, borderRadius: "3px", borderLeft: `3px solid ${COLORS.primary}`, marginBottom: "24px" },
   reminderLabel: { fontSize: "12px", color: COLORS.midgray, margin: "0 0 4px", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "sans-serif" },
   reminderText: { fontSize: "15px", color: COLORS.darktext, margin: "0", fontStyle: "italic" },
-  checklist: { padding: "16px 20px", backgroundColor: COLORS.lightgray, borderRadius: "3px" },
+  checklist: { padding: "16px 20px", backgroundColor: COLORS.lightgray, borderRadius: "3px", marginBottom: "20px" },
   checkItem: { fontSize: "14px", color: COLORS.darktext, margin: "6px 0", lineHeight: "1.5" },
   goalRow: { display: "flex", alignItems: "center", gap: "12px", marginBottom: "10px" },
   goalNum: { width: "28px", height: "28px", borderRadius: "50%", backgroundColor: COLORS.lightgray, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "13px", color: COLORS.midgray, flexShrink: 0, fontFamily: "sans-serif" },
@@ -811,7 +624,7 @@ const styles = {
   doneSummary: { textAlign: "left", padding: "16px 20px", backgroundColor: COLORS.lightgray, borderRadius: "3px", marginBottom: "16px" },
   doneSummaryLabel: { fontSize: "12px", color: COLORS.midgray, margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "sans-serif" },
   doneSummaryItem: { fontSize: "15px", color: COLORS.darktext, margin: "4px 0" },
-  doneIntention: { padding: "16px 20px", backgroundColor: COLORS.lightgray, borderRadius: "3px", marginBottom: "28px" },
+  doneIntention: { padding: "16px 20px", backgroundColor: COLORS.lightgray, borderRadius: "3px", marginBottom: "16px" },
   doneIntentionText: { fontSize: "15px", color: COLORS.darktext, margin: "0", fontStyle: "italic" },
   doneProgress: { marginBottom: "28px" },
   doneProgressText: { fontSize: "14px", color: COLORS.darktext, marginBottom: "12px" },
