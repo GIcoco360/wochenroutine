@@ -82,10 +82,10 @@ function InfoPage({ onClose }) {
         </div>
         <Sec title="Was die App ist">Die 3×3 Wochenroutine ist ein digitaler Begleiter für Zeitmanagement und Selbstführung. Sie führt einmal pro Woche in 30 Minuten durch einen strukturierten Prozess aus Reflexion und Planung.</Sec>
         <Sec title="Der wöchentliche Ablauf">
-          <p style={ip}>Die Routine besteht aus drei Schritten: Erst die Woche reflektieren und abschließen, dann den Terminplan aktualisieren, dann die Aufgabenliste organisieren.</p>
-          <p style={ip}><strong>Schritt 1 — Die Woche reflektieren (~10 Min):</strong> 5-Finger-Reflexion und Plan-Check. Wie war die Woche? Wie gut hat der Plan zur Realität gepasst?</p>
-          <p style={ip}><strong>Schritt 2 — Den Terminplan aktualisieren (~10 Min):</strong> Mit dem 5-Elemente-Stundenplan die kommende Woche strukturieren: Arbeitszeiten, Pausen, Fixtermine, Kernaktivitäten, Zeitpuffer.</p>
-          <p style={ip}><strong>Schritt 3 — Die Aufgabenliste organisieren (~10 Min):</strong> Nach dem Kanban-Prinzip: Sammeln, Organisieren, Erledigen. Abschluss mit Vorhaben und Haltung für die Woche.</p>
+          <p style={ip}>Die Routine besteht aus drei Schritten: Erst die Woche reflektieren, dann Termine und Aufgaben planen, dann die kommende Woche fokussieren.</p>
+          <p style={ip}><strong>Schritt 1 — Reflektieren (~10 Min):</strong> 5-Finger-Methode und Plan-Check. Wie war die Woche? Wie gut hat der Plan zur Realität gepasst?</p>
+          <p style={ip}><strong>Schritt 2 — Planen (~15 Min):</strong> Mit dem 5-Elemente-Stundenplan die kommende Woche strukturieren (Arbeitszeiten, Pausen, Fixtermine, Kernaktivitäten, Zeitpuffer) und die Aufgabenliste nach dem Kanban-Prinzip organisieren (Sammeln, Organisieren, Erledigen).</p>
+          <p style={ip}><strong>Schritt 3 — Fokussieren (~5 Min):</strong> Mit der Triple-A-Methode nach Caroline Webb: Anliegen, Haltung und Aufmerksamkeit für die kommende Woche setzen.</p>
         </Sec>
         <Sec title="Die wissenschaftliche Grundlage">Das Format basiert auf dem Befund der Trentepohl-Studie (2022), dass regelmäßiges Planen und Reflektieren die einzige Zeitmanagement-Intervention ist, die nachhaltig wirkt. Belegt durch die Meta-Analysen von Aeon et al. (2021) und Bedi & Sass (2023).</Sec>
         <Sec title="Technisch">Die Daten liegen lokal im Browser (localStorage) — es gibt keine zentrale Datenbank und kein Login. Die Daten können jederzeit exportiert und importiert werden.</Sec>
@@ -113,7 +113,7 @@ function SmartTipp({ children }) {
 // ==================== MAIN APP ====================
 export default function WochenRoutine() {
   const [currentWeek] = useState(getWeekKey());
-  // Steps: -1=welcome, 0=start, 1=finger, 2=plancheck, 3=terminplan, 4=aufgabenliste, 5=vorhaben, 6=done
+  // Steps: -1=welcome, 0=start, 1=finger, 2=plancheck, 3=terminplan, 4=aufgabenliste, 5=triple-a, 6=done
   const [step, setStep] = useState(-1);
   const [activeFinger, setActiveFinger] = useState(0);
   const [weekData, setWeekData] = useState(null);
@@ -249,7 +249,7 @@ export default function WochenRoutine() {
           <div style={{ width: "100%", maxWidth: "440px", textAlign: "center" }}>
             <img src="/logo.png" alt="3×3 Business Coaching" style={{ width: "260px", height: "auto", display: "block", margin: "0 auto 48px" }} />
             <h1 style={{ fontSize: "28px", fontWeight: "400", color: COLORS.black, margin: "0", lineHeight: "1.25", letterSpacing: "-0.3px" }}>3×3 Wochenroutine <BetaBadge /></h1>
-            <p style={{ fontSize: "16px", color: COLORS.midgray, lineHeight: "1.6", margin: "20px 0 0", whiteSpace: "pre-line", fontFamily: "'Georgia', serif" }}>{"30 Minuten pro Woche.\nReflektieren. Planen. Organisieren."}</p>
+            <p style={{ fontSize: "16px", color: COLORS.midgray, lineHeight: "1.6", margin: "20px 0 0", whiteSpace: "pre-line", fontFamily: "'Georgia', serif" }}>{"30 Minuten pro Woche.\nReflektieren. Planen. Fokussieren."}</p>
             <div style={{ width: "32px", height: "1.5px", backgroundColor: COLORS.warmgray, margin: "40px auto" }} />
             <p style={{ fontSize: "14px", color: COLORS.midgray, lineHeight: "1.7", margin: "0 auto", maxWidth: "340px", fontStyle: "italic", fontFamily: "'Georgia', serif" }}>Du nutzt deine eigenen Tools für Kalender und Aufgaben. Diese App führt dich durch den Prozess.</p>
             <div style={{ margin: "32px auto 0", maxWidth: "380px", padding: "14px 16px", backgroundColor: COLORS.lightgray, borderRadius: "3px", textAlign: "left" }}>
@@ -281,12 +281,12 @@ export default function WochenRoutine() {
               <>
                 <div style={styles.heroSection}>
                   <h1 style={styles.heroTitle}>3×3 Wochenroutine <BetaBadge /></h1>
-                  <p style={styles.heroSub}>{"30 Minuten für deine Woche.\nReflektieren. Planen. Organisieren."}</p>
+                  <p style={styles.heroSub}>{"30 Minuten für deine Woche.\nReflektieren. Planen. Fokussieren."}</p>
                 </div>
                 <div style={styles.stepsPreview}>
-                  <StepPreview num="1" title="Die Woche reflektieren" time="~10 Min" desc="Rückblick und Abschluss" />
-                  <StepPreview num="2" title="Den Terminplan aktualisieren" time="~10 Min" desc="Stundenplan für die neue Woche" />
-                  <StepPreview num="3" title="Die Aufgabenliste organisieren" time="~10 Min" desc="Aufgaben ordnen, Haltung setzen" />
+                  <StepPreview num="1" title="Reflektieren" time="~10 Min" desc="5-Finger-Methode + Plan-Check" />
+                  <StepPreview num="2" title="Planen" time="~15 Min" desc="5-Elemente-Stundenplan + Kanban" />
+                  <StepPreview num="3" title="Fokussieren" time="~5 Min" desc="Triple-A-Methode" />
                 </div>
                 {alreadyDone ? (
                   <div style={{ textAlign: "center", padding: "20px 0" }}>
@@ -324,7 +324,7 @@ export default function WochenRoutine() {
     const current = FINGER_LABELS[activeFinger];
     return (
       <div style={styles.container}><div style={styles.card}>
-        <StepHeader step="1" title="Die Woche reflektieren" timeHint="5-Finger-Reflexion · ~7 Min" elapsed={elapsed} formatTime={formatTime} />
+        <StepHeader step="1" title="Reflektieren" timeHint="5-Finger-Methode · ~7 Min" elapsed={elapsed} formatTime={formatTime} />
         <p style={styles.stepIntro}>Schau auf deine vergangene Woche. Nicht auf den Plan — auf dein Erleben.</p>
         <div style={styles.fingerTabs}>
           {FINGER_LABELS.map((f, i) => (
@@ -353,11 +353,11 @@ export default function WochenRoutine() {
     const hasPrevious = previousWeek?.completed;
     return (
       <div style={styles.container}><div style={styles.card}>
-        <StepHeader step="1" title="Die Woche reflektieren" timeHint="Plan-Check · ~3 Min" elapsed={elapsed} formatTime={formatTime} />
+        <StepHeader step="1" title="Reflektieren" timeHint="Plan-Check · ~3 Min" elapsed={elapsed} formatTime={formatTime} />
         <p style={styles.stepIntro}>Öffne deinen Kalender / Wochenplan und deine ToDo-Liste der letzten Woche. Schau kurz drauf — und beantworte dann diese Fragen.</p>
         {hasPrevious && previousWeek.weekGoals?.some(g => g) && (
           <div style={styles.prevGoals}>
-            <p style={styles.prevGoalsLabel}>Deine Vorhaben letzte Woche:</p>
+            <p style={styles.prevGoalsLabel}>Deine Anliegen letzte Woche:</p>
             {previousWeek.weekGoals.filter(g => g).map((g, i) => <p key={i} style={styles.prevGoalItem}>→ {g}</p>)}
           </div>
         )}
@@ -393,7 +393,7 @@ export default function WochenRoutine() {
   if (step === 3) {
     return (
       <div style={styles.container}><div style={styles.card}>
-        <StepHeader step="2" title="Den Terminplan aktualisieren" timeHint="~10 Minuten" elapsed={elapsed} formatTime={formatTime} />
+        <StepHeader step="2" title="Planen" timeHint="5-Elemente-Stundenplan · ~7 Min" elapsed={elapsed} formatTime={formatTime} />
 
         {weekData.planCheckTakeaway && (
           <div style={styles.reminder}>
@@ -433,7 +433,7 @@ export default function WochenRoutine() {
   if (step === 4) {
     return (
       <div style={styles.container}><div style={styles.card}>
-        <StepHeader step="3" title="Die Aufgabenliste organisieren" timeHint="~10 Minuten" elapsed={elapsed} formatTime={formatTime} />
+        <StepHeader step="2" title="Planen" timeHint="Kanban-Aufgabenliste · ~8 Min" elapsed={elapsed} formatTime={formatTime} />
 
         <p style={styles.stepIntro}>Wie deine Termine einen fixen Platz haben — den Kalender — so brauchen auch deine Aufgaben einen fixen Ort. Organisiere deine Aufgabenliste nach dem Kanban-Prinzip mit drei Spalten:</p>
 
@@ -471,7 +471,7 @@ export default function WochenRoutine() {
         <div style={styles.fingerNav}>
           <button onClick={() => setStep(3)} style={styles.secondaryBtn}>Zurück</button>
           <div style={{ flex: 1 }} />
-          <button onClick={() => nextStep(5)} style={styles.primaryBtnSmall}>Vorhaben & Haltung →</button>
+          <button onClick={() => nextStep(5)} style={styles.primaryBtnSmall}>Zu Triple-A →</button>
         </div>
       </div></div>
     );
@@ -481,9 +481,9 @@ export default function WochenRoutine() {
   if (step === 5) {
     return (
       <div style={styles.container}><div style={styles.card}>
-        <StepHeader step="3" title="Vorhaben & Haltung" timeHint="" elapsed={elapsed} formatTime={formatTime} />
+        <StepHeader step="3" title="Fokussieren" timeHint="Triple-A-Methode · ~5 Min" elapsed={elapsed} formatTime={formatTime} />
         <div style={styles.fieldGroup}>
-          <label style={styles.label}>Meine drei wichtigsten Vorhaben diese Woche:</label>
+          <label style={styles.label}>Was sind meine drei Kernanliegen für die kommende Woche?</label>
           {[0, 1, 2].map((i) => (
             <div key={i} style={styles.goalRow}>
               <span style={styles.goalNum}>{i + 1}</span>
@@ -522,10 +522,10 @@ export default function WochenRoutine() {
             <p style={styles.doneTime}>{formatTime(elapsed)} Minuten</p>
           </div>
 
-          {/* Vorhaben summary */}
+          {/* Anliegen summary */}
           {weekData.weekGoals.filter(g => g).length > 0 && (
             <div style={styles.doneSummary}>
-              <p style={styles.doneSummaryLabel}>Deine Vorhaben:</p>
+              <p style={styles.doneSummaryLabel}>Deine Anliegen:</p>
               {weekData.weekGoals.filter(g => g).map((g, i) => <p key={i} style={styles.doneSummaryItem}>{i + 1}. {g}</p>)}
             </div>
           )}
