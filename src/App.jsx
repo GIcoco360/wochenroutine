@@ -265,6 +265,7 @@ export default function WochenRoutine() {
             <div style={{ margin: "32px auto 0", maxWidth: "380px", padding: "14px 16px", backgroundColor: COLORS.lightgray, borderRadius: "3px", textAlign: "left" }}>
               <p style={{ fontSize: "13px", color: COLORS.midgray, lineHeight: "1.55", margin: "0" }}>
                <strong style={{ color: COLORS.darktext }}>Datenschutz:</strong> Deine Daten werden ausschließlich lokal in deinem Browser gespeichert. Für anonyme Nutzungsstatistiken verwenden wir Plausible (EU-Hosting, keine Cookies, kein Personenbezug). <a href="https://www.so-smart.club/datenschutz" target="_blank" rel="noopener noreferrer" style={{ color: COLORS.primary }}>Mehr erfahren</a>.
+                </p>
             </div>
             <button onClick={() => { setWelcomeSeen(true); setStep(0); }} style={{ ...styles.primaryBtn, marginTop: "32px", maxWidth: "280px", marginLeft: "auto", marginRight: "auto" }}>Starten</button>
           </div>
