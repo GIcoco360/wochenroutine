@@ -66,6 +66,15 @@ function getPreviousWeekKey(weekKey) {
 
 const STORAGE_KEY = "wochenroutine";
 
+// Plausible Custom Events helper — fails silently if Plausible is blocked/unavailable
+const track = (event, props) => {
+  try {
+    if (typeof window !== "undefined" && typeof window.plausible === "function") {
+      props ? window.plausible(event, { props }) : window.plausible(event);
+    }
+  } catch (e) { /* silent */ }
+};
+
 const footerLink = { fontSize: "13px", fontWeight: "500", color: COLORS.midgray, textDecoration: "none", borderBottom: `1px solid ${COLORS.warmgray}`, paddingBottom: "1px" };
 
 function AppFooter({ onShowInfo }) {
@@ -187,18 +196,35 @@ export default function WochenRoutine() {
     completed: false,
   });
 
-  const startRoutine = () => { const data = weekData || initWeekData(); setWeekData(data); setStep(1); setTimerStart(Date.now()); };
+  const startRoutine = () => { const data = weekData || initWeekData(); setWeekData(data); setStep(1); setTimerStart(Date.now()); track("routine_started"); };
   const updateField = (field, value) => setWeekData({ ...weekData, [field]: value });
   const updateFinger = (i, v) => { const f = [...weekData.fingers]; f[i] = v; updateField("fingers", f); };
   const updateGoal = (i, v) => { const g = [...weekData.weekGoals]; g[i] = v; updateField("weekGoals", g); };
-  const nextStep = async (to) => { await saveData(weekData); setStep(to); };
-  const finishRoutine = async () => { const final = { ...weekData, completed: true, completedAt: new Date().toISOString(), durationSeconds: elapsed }; await saveData(final); setStep(6); };
+  const nextStep = async (to) => {
+    await saveData(weekData);
+    if (to === 2) track("step_1_finger_complete");
+    else if (to === 3) track("step_1_plancheck_complete");
+    else if (to === 4) track("step_2_terminplan_complete");
+    else if (to === 5) track("step_2_aufgaben_complete");
+    setStep(to);
+  };
+  const finishRoutine = async () => {
+    const final = { ...weekData, completed: true, completedAt: new Date().toISOString(), durationSeconds: elapsed };
+    await saveData(final);
+    const totalCompleted = Object.values({ ...allWeeks, [currentWeek]: final }).filter(d => d.completed).length;
+    track("routine_completed", {
+      duration_minutes: Math.round(elapsed / 60),
+      completed_weeks_total: totalCompleted
+    });
+    setStep(6);
+  };
   const getCompletedWeeks = () => Object.entries(allWeeks).filter(([, d]) => d.completed).sort(([a], [b]) => b.localeCompare(a));
 
   const exportData = () => {
     const blob = new Blob([JSON.stringify(allWeeks, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = `wochenroutine-backup-${getWeekKey()}.json`; a.click(); URL.revokeObjectURL(url);
+    track("data_exported");
   };
 
   const importData = (e) => {
@@ -211,6 +237,7 @@ export default function WochenRoutine() {
           const merged = { ...allWeeks, ...imported }; setAllWeeks(merged);
           if (merged[currentWeek]) setWeekData(merged[currentWeek]);
           await window.storage.set(STORAGE_KEY, JSON.stringify(merged));
+          track("data_imported");
           alert("Daten erfolgreich importiert.");
         }
       } catch { alert("Die Datei konnte nicht gelesen werden."); }
@@ -238,6 +265,7 @@ export default function WochenRoutine() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = "wochenroutine.ics"; a.click(); URL.revokeObjectURL(url);
     await saveData({ ...weekData, calendarExported: true });
+    track("calendar_event_exported");
   };
 
   const formatDateDE = (dateStr) => {
@@ -264,8 +292,8 @@ export default function WochenRoutine() {
             <p style={{ fontSize: "16px", color: COLORS.midgray, lineHeight: "1.55", margin: "0 auto", maxWidth: "340px", fontStyle: "italic", fontFamily: "'Georgia', serif" }}>Du nutzt deine eigenen Tools für Kalender und Aufgaben. Diese App führt dich durch den Prozess.</p>
             <div style={{ margin: "32px auto 0", maxWidth: "380px", padding: "14px 16px", backgroundColor: COLORS.lightgray, borderRadius: "3px", textAlign: "left" }}>
               <p style={{ fontSize: "13px", color: COLORS.midgray, lineHeight: "1.55", margin: "0" }}>
-               <strong style={{ color: COLORS.darktext }}>Datenschutz:</strong> Deine Daten werden ausschließlich lokal in deinem Browser gespeichert. Für anonyme Nutzungsstatistiken verwenden wir Plausible (EU-Hosting, keine Cookies, kein Personenbezug). <a href="https://www.so-smart.club/datenschutz" target="_blank" rel="noopener noreferrer" style={{ color: COLORS.primary }}>Mehr erfahren</a>.
-                </p>
+                <strong style={{ color: COLORS.darktext }}>Datenschutz:</strong> Deine Daten werden ausschließlich lokal in deinem Browser gespeichert. Es werden keine Daten an Server oder Dritte übermittelt. Kein Tracking, keine Cookies. <a href="https://www.so-smart.club/datenschutz" target="_blank" rel="noopener noreferrer" style={{ color: COLORS.primary }}>Mehr erfahren</a>.
+              </p>
             </div>
             <button onClick={() => { setWelcomeSeen(true); setStep(0); }} style={{ ...styles.primaryBtn, marginTop: "32px", maxWidth: "280px", marginLeft: "auto", marginRight: "auto" }}>Starten</button>
           </div>
@@ -285,7 +313,7 @@ export default function WochenRoutine() {
           <div style={styles.card}>
             <div style={styles.topBar}>
               <span style={styles.weekLabel}>{getWeekLabel(currentWeek)}</span>
-              {completedCount > 0 && <button onClick={() => setHistoryOpen(!historyOpen)} style={styles.historyBtn}>{historyOpen ? "Schließen" : `Verlauf (${completedCount})`}</button>}
+              {completedCount > 0 && <button onClick={() => { if (!historyOpen) track("history_opened"); setHistoryOpen(!historyOpen); }} style={styles.historyBtn}>{historyOpen ? "Schließen" : `Verlauf (${completedCount})`}</button>}
             </div>
             {historyOpen ? <HistoryView weeks={allWeeks} /> : (
               <>
