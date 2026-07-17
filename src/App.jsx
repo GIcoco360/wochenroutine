@@ -155,7 +155,7 @@ export default function WochenRoutine() {
           const parsed = JSON.parse(result.value);
           setAllWeeks(parsed);
           hasData = Object.keys(parsed).length > 0;
-          if (parsed[currentWeek]) setWeekData(parsed[currentWeek]);
+          if (parsed[currentWeek]) setWeekData({ ...initWeekData(), ...parsed[currentWeek] });
           const prevKey = getPreviousWeekKey(currentWeek);
           if (parsed[prevKey]) setPreviousWeek(parsed[prevKey]);
         }
@@ -202,7 +202,7 @@ export default function WochenRoutine() {
   const updateField = (field, value) => setWeekData({ ...weekData, [field]: value });
   const updateFinger = (i, v) => { const f = [...weekData.fingers]; f[i] = v; updateField("fingers", f); };
   const updateGoal = (i, v) => { const g = [...weekData.weekGoals]; g[i] = v; updateField("weekGoals", g); };
-  const toggleCheck = (field, i) => { const arr = [...weekData[field]]; arr[i] = !arr[i]; updateField(field, arr); };
+  const toggleCheck = (field, i) => { const arr = [...(weekData[field] || [false, false, false, false, false])]; arr[i] = !arr[i]; updateField(field, arr); };
   const nextStep = async (to) => {
     await saveData(weekData);
     if (to === 2) track("step_1_finger_complete");
@@ -441,11 +441,11 @@ export default function WochenRoutine() {
         {/* Block 1: In deinem Kalender */}
         <div style={styles.checklist}>
           <p style={styles.checklistTitle}>In deinem Kalender:</p>
-          <CheckItem checked={weekData.terminplanChecks[0]} onToggle={() => toggleCheck("terminplanChecks", 0)} boxStyle={styles.cboxArbeit} boxStyleChecked={styles.cboxArbeitChecked}>Arbeitszeiten stehen (Anfang und Ende)</CheckItem>
-          <CheckItem checked={weekData.terminplanChecks[1]} onToggle={() => toggleCheck("terminplanChecks", 1)} boxStyle={styles.cboxPause} boxStyleChecked={styles.cboxPauseChecked}>Pausen und Freizeitaktivitäten sind bewusst eingeplant</CheckItem>
-          <CheckItem checked={weekData.terminplanChecks[2]} onToggle={() => toggleCheck("terminplanChecks", 2)} boxStyle={styles.cboxFix} boxStyleChecked={styles.cboxFixChecked}>Termine sind eingetragen</CheckItem>
-          <CheckItem checked={weekData.terminplanChecks[3]} onToggle={() => toggleCheck("terminplanChecks", 3)} boxStyle={styles.cboxKern} boxStyleChecked={styles.cboxKernChecked}>Kernaktivitäten haben feste Zeitblöcke</CheckItem>
-          <CheckItem checked={weekData.terminplanChecks[4]} onToggle={() => toggleCheck("terminplanChecks", 4)} boxStyle={styles.cboxPuffer} boxStyleChecked={styles.cboxPufferChecked}>Mindestens 1 Stunde Pufferzeit pro Tag</CheckItem>
+          <CheckItem checked={weekData.terminplanChecks?.[0]} onToggle={() => toggleCheck("terminplanChecks", 0)} boxStyle={styles.cboxArbeit} boxStyleChecked={styles.cboxArbeitChecked}>Arbeitszeiten stehen (Anfang und Ende)</CheckItem>
+          <CheckItem checked={weekData.terminplanChecks?.[1]} onToggle={() => toggleCheck("terminplanChecks", 1)} boxStyle={styles.cboxPause} boxStyleChecked={styles.cboxPauseChecked}>Pausen und Freizeitaktivitäten sind bewusst eingeplant</CheckItem>
+          <CheckItem checked={weekData.terminplanChecks?.[2]} onToggle={() => toggleCheck("terminplanChecks", 2)} boxStyle={styles.cboxFix} boxStyleChecked={styles.cboxFixChecked}>Termine sind eingetragen</CheckItem>
+          <CheckItem checked={weekData.terminplanChecks?.[3]} onToggle={() => toggleCheck("terminplanChecks", 3)} boxStyle={styles.cboxKern} boxStyleChecked={styles.cboxKernChecked}>Kernaktivitäten haben feste Zeitblöcke</CheckItem>
+          <CheckItem checked={weekData.terminplanChecks?.[4]} onToggle={() => toggleCheck("terminplanChecks", 4)} boxStyle={styles.cboxPuffer} boxStyleChecked={styles.cboxPufferChecked}>Mindestens 1 Stunde Pufferzeit pro Tag</CheckItem>
         </div>
 
         {/* Block 2: Zufriedenheit */}
@@ -497,10 +497,10 @@ export default function WochenRoutine() {
         {/* Block 1: In deinem Aufgaben-Tool */}
         <div style={styles.checklist}>
           <p style={styles.checklistTitle}>In deinem Aufgaben-Tool:</p>
-          <CheckItem checked={weekData.aufgabenChecks[0]} onToggle={() => toggleCheck("aufgabenChecks", 0)} boxStyle={styles.cboxNeutral} boxStyleChecked={styles.cboxNeutralChecked}>Löschen oder delegieren, was nicht mehr relevant ist</CheckItem>
-          <CheckItem checked={weekData.aufgabenChecks[1]} onToggle={() => toggleCheck("aufgabenChecks", 1)} boxStyle={styles.cboxNeutral} boxStyleChecked={styles.cboxNeutralChecked}>Formulierungen selbsterklärend machen</CheckItem>
-          <CheckItem checked={weekData.aufgabenChecks[2]} onToggle={() => toggleCheck("aufgabenChecks", 2)} boxStyle={styles.cboxNeutral} boxStyleChecked={styles.cboxNeutralChecked}>Zeitabschätzung pro Aufgabe</CheckItem>
-          <CheckItem checked={weekData.aufgabenChecks[3]} onToggle={() => toggleCheck("aufgabenChecks", 3)} boxStyle={styles.cboxNeutral} boxStyleChecked={styles.cboxNeutralChecked}>Aufgaben in „Diese Woche" verschieben</CheckItem>
+          <CheckItem checked={weekData.aufgabenChecks?.[0]} onToggle={() => toggleCheck("aufgabenChecks", 0)} boxStyle={styles.cboxNeutral} boxStyleChecked={styles.cboxNeutralChecked}>Löschen oder delegieren, was nicht mehr relevant ist</CheckItem>
+          <CheckItem checked={weekData.aufgabenChecks?.[1]} onToggle={() => toggleCheck("aufgabenChecks", 1)} boxStyle={styles.cboxNeutral} boxStyleChecked={styles.cboxNeutralChecked}>Formulierungen selbsterklärend machen</CheckItem>
+          <CheckItem checked={weekData.aufgabenChecks?.[2]} onToggle={() => toggleCheck("aufgabenChecks", 2)} boxStyle={styles.cboxNeutral} boxStyleChecked={styles.cboxNeutralChecked}>Zeitabschätzung pro Aufgabe</CheckItem>
+          <CheckItem checked={weekData.aufgabenChecks?.[3]} onToggle={() => toggleCheck("aufgabenChecks", 3)} boxStyle={styles.cboxNeutral} boxStyleChecked={styles.cboxNeutralChecked}>Aufgaben in „Diese Woche" verschieben</CheckItem>
         </div>
 
         {/* Block 2: Zufriedenheit */}
