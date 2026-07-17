@@ -191,6 +191,8 @@ export default function WochenRoutine() {
     weekKey: currentWeek, createdAt: new Date().toISOString(),
     fingers: ["", "", "", "", ""],
     planCheckScore: null, planCheckReason: "", planCheckTakeaway: "",
+    terminplanChecks: [false, false, false, false, false], terminplanSatisfaction: null,
+    aufgabenChecks: [false, false, false, false], aufgabenSatisfaction: null,
     weekGoals: ["", "", ""], weekIntention: "", weekAttention: "",
     nextPlanDate: getNextSunday(), nextPlanTime: "09:00",
     completed: false,
@@ -200,6 +202,7 @@ export default function WochenRoutine() {
   const updateField = (field, value) => setWeekData({ ...weekData, [field]: value });
   const updateFinger = (i, v) => { const f = [...weekData.fingers]; f[i] = v; updateField("fingers", f); };
   const updateGoal = (i, v) => { const g = [...weekData.weekGoals]; g[i] = v; updateField("weekGoals", g); };
+  const toggleCheck = (field, i) => { const arr = [...weekData[field]]; arr[i] = !arr[i]; updateField(field, arr); };
   const nextStep = async (to) => {
     await saveData(weekData);
     if (to === 2) track("step_1_finger_complete");
@@ -401,14 +404,7 @@ export default function WochenRoutine() {
         )}
         <div style={styles.fieldGroup}>
           <label style={styles.label}>Wie gut hat dein Plan (Termine und Aufgaben) zur Realität gepasst?</label>
-          <div style={styles.scaleRow}>
-            {PLAN_SCALE.map((s) => (
-              <button key={s.value} onClick={() => updateField("planCheckScore", s.value)} style={{ ...styles.scaleBtn, backgroundColor: weekData.planCheckScore === s.value ? COLORS.primary : COLORS.lightgray, color: weekData.planCheckScore === s.value ? "#fff" : COLORS.darktext }}>
-                <span style={{ fontSize: "16px", fontWeight: "600" }}>{s.value}</span>
-                <span style={{ fontSize: "12px", marginTop: "4px", fontWeight: "500" }}>{s.label}</span>
-              </button>
-            ))}
-          </div>
+          <SatisfactionSlider value={weekData.planCheckScore} onChange={(v) => updateField("planCheckScore", v)} lowLabel="1 · kaum" highLabel="10 · sehr gut" />
         </div>
         <div style={styles.fieldGroup}>
           <label style={styles.label}>Was war der Grund, wenn etwas nicht stattgefunden hat?</label>
@@ -440,28 +436,51 @@ export default function WochenRoutine() {
           </div>
         )}
 
-        <p style={styles.stepIntro}>Öffne deinen Kalender und aktualisiere deinen Stundenplan für die nächste Woche. Ein guter Wochenplan berücksichtigt fünf Elemente:</p>
+        <p style={styles.stepIntro}>Öffne deinen Kalender. Ein guter Wochenplan setzt fünf Elemente aufeinander auf:</p>
 
+        {/* Block 1: In deinem Kalender */}
         <div style={styles.checklist}>
-          <p style={styles.checkItem}><strong style={{ color: COLORS.primary }}>1.</strong> <strong>Arbeitszeiten</strong> — wann beginnt dein Tag, wann endet er</p>
-          <p style={styles.checkItem}><strong style={{ color: COLORS.primary }}>2.</strong> <strong>Pausen und Freizeit</strong> — bewusst eingeplant, nicht als Restposten</p>
-          <p style={styles.checkItem}><strong style={{ color: COLORS.primary }}>3.</strong> <strong>Fixtermine</strong> — Besprechungen, Verpflichtungen</p>
-          <p style={styles.checkItem}><strong style={{ color: COLORS.primary }}>4.</strong> <strong>Kernaktivitäten</strong> — feste Zeitblöcke für deine wichtigsten Tätigkeiten</p>
-          <p style={{ ...styles.checkItem, borderTop: `1px solid ${COLORS.warmgray}`, paddingTop: "8px", marginTop: "8px" }}><strong style={{ color: COLORS.primary }}>5.</strong> <strong>Zeitpuffer</strong> — mindestens eine Stunde pro Tag unverplant lassen</p>
+          <p style={styles.checklistTitle}>In deinem Kalender:</p>
+          <CheckItem checked={weekData.terminplanChecks[0]} onToggle={() => toggleCheck("terminplanChecks", 0)} boxStyle={styles.cboxArbeit} boxStyleChecked={styles.cboxArbeitChecked}>Arbeitszeiten stehen (Anfang und Ende)</CheckItem>
+          <CheckItem checked={weekData.terminplanChecks[1]} onToggle={() => toggleCheck("terminplanChecks", 1)} boxStyle={styles.cboxPause} boxStyleChecked={styles.cboxPauseChecked}>Pausen und Freizeitaktivitäten sind bewusst eingeplant</CheckItem>
+          <CheckItem checked={weekData.terminplanChecks[2]} onToggle={() => toggleCheck("terminplanChecks", 2)} boxStyle={styles.cboxFix} boxStyleChecked={styles.cboxFixChecked}>Termine sind eingetragen</CheckItem>
+          <CheckItem checked={weekData.terminplanChecks[3]} onToggle={() => toggleCheck("terminplanChecks", 3)} boxStyle={styles.cboxKern} boxStyleChecked={styles.cboxKernChecked}>Kernaktivitäten haben feste Zeitblöcke</CheckItem>
+          <CheckItem checked={weekData.terminplanChecks[4]} onToggle={() => toggleCheck("terminplanChecks", 4)} boxStyle={styles.cboxPuffer} boxStyleChecked={styles.cboxPufferChecked}>Mindestens 1 Stunde Pufferzeit pro Tag</CheckItem>
         </div>
 
+        {/* Block 2: Zufriedenheit */}
+        <div style={styles.satisfactionBox}>
+          <p style={styles.satisfactionQuestion}>Wie zufrieden bist du mit deinem Wochenplan?</p>
+          <SatisfactionSlider value={weekData.terminplanSatisfaction} onChange={(v) => updateField("terminplanSatisfaction", v)} lowLabel="1 · wenig" highLabel="10 · top" />
+        </div>
+
+        {/* Block 3: Zwischenüberschrift */}
+        <h3 style={styles.sectionHeading}>5-Elemente-Stundenplan</h3>
+
+        {/* Block 4: Smart Tipp */}
         <SmartTipp>
-          Bau dir einmal einen 5-Elemente-Stundenplan für deine typische Woche. Im Rahmen der Wochenplanung passt du ihn nur noch an — du musst die Woche nicht jedes Mal neu erfinden.
+          Bau dir einmal einen 5-Elemente-Stundenplan für deine typische Woche. In der Wochenplanung passt du ihn nur noch an — du musst die Woche nicht jedes Mal neu erfinden.
         </SmartTipp>
 
-        <p style={{ fontSize: "16px", color: COLORS.midgray, lineHeight: "1.55", margin: "0 0 0", fontStyle: "italic" }}>
-          Das Ergebnis: dein Terminplan für die nächste Woche.
-        </p>
+        {/* Block 5: Kalenderblatt */}
+        <WeekSchema />
+
+        {/* Block 6: Die Elemente */}
+        <div style={styles.rahmenBlock}>
+          <p style={styles.checklistTitle}>Die Elemente</p>
+          <div style={styles.rahmenGrid}>
+            <LegendItem num="1" swatchStyle={{ background: "rgba(0,131,142,0.08)", borderLeft: `3px solid ${COLORS.primary}` }}>Arbeitszeit</LegendItem>
+            <LegendItem num="4" swatchStyle={{ background: "#fff", border: `1.5px solid ${COLORS.primary}`, borderLeft: `3px solid ${COLORS.primary}` }}>Kernaktivitäten</LegendItem>
+            <LegendItem num="2" swatchStyle={{ background: "rgba(105,240,174,0.32)", borderLeft: `3px solid ${COLORS.accent}` }}>Pausen &amp; Freizeit</LegendItem>
+            <LegendItem num="3" swatchStyle={{ background: "#fff", border: `1.5px solid ${COLORS.warm}`, borderLeft: `3px solid ${COLORS.warm}` }}>Termine</LegendItem>
+            <LegendItem num="5" swatchStyle={{ background: "repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(0,131,142,0.22) 3px, rgba(0,131,142,0.22) 4px)" }}>Pufferzeit</LegendItem>
+          </div>
+        </div>
 
         <div style={styles.fingerNav}>
           <button onClick={() => setStep(2)} style={styles.secondaryBtn}>Zurück</button>
           <div style={{ flex: 1 }} />
-          <button onClick={() => nextStep(4)} style={styles.primaryBtnSmall}>Zur Aufgabenliste →</button>
+          <button onClick={() => { track("terminplan_satisfaction", weekData.terminplanSatisfaction ? { value: weekData.terminplanSatisfaction } : undefined); nextStep(4); }} style={styles.primaryBtnSmall}>Zur Aufgabenliste →</button>
         </div>
       </div></div>
     );
@@ -473,43 +492,51 @@ export default function WochenRoutine() {
       <div style={styles.container}><div style={styles.card}>
         <StepHeader step="2" title="Planen" timeHint="Kanban-Aufgabenliste · ~8 Min" elapsed={elapsed} formatTime={formatTime} />
 
-        <p style={styles.stepIntro}>Wie deine Termine einen fixen Platz haben — den Kalender — so brauchen auch deine Aufgaben einen fixen Ort. Organisiere deine Aufgabenliste nach dem Kanban-Prinzip mit drei Spalten:</p>
+        <p style={styles.stepIntro}>Wie deine Termine einen fixen Platz haben — den Kalender — so brauchen auch deine Aufgaben einen fixen Ort. Nach dem Kanban-Prinzip:</p>
 
-        <div style={{ display: "flex", gap: "8px", marginBottom: "20px", flexWrap: "wrap" }}>
-          <div style={{ flex: 1, minWidth: "130px", padding: "14px 12px", backgroundColor: COLORS.lightgray, borderRadius: "3px", borderTop: `3px solid ${COLORS.midgray}` }}>
-            <p style={{ fontSize: "13px", color: COLORS.midgray, margin: "0 0 6px", fontWeight: "700", fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: "0.5px" }}>Aufgabenspeicher</p>
-            <p style={{ fontSize: "14px", color: COLORS.darktext, margin: "0", lineHeight: "1.5" }}>Alles was anfällt, landet zuerst hier.</p>
-          </div>
-          <div style={{ flex: 1, minWidth: "130px", padding: "14px 12px", backgroundColor: COLORS.lightgray, borderRadius: "3px", borderTop: `3px solid ${COLORS.primary}` }}>
-            <p style={{ fontSize: "13px", color: COLORS.primary, margin: "0 0 6px", fontWeight: "700", fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: "0.5px" }}>Diese Woche</p>
-            <p style={{ fontSize: "14px", color: COLORS.darktext, margin: "0", lineHeight: "1.5" }}>Was du diese Woche erledigen willst.</p>
-          </div>
-          <div style={{ flex: 1, minWidth: "130px", padding: "14px 12px", backgroundColor: COLORS.lightgray, borderRadius: "3px", borderTop: `3px solid ${COLORS.accent}` }}>
-            <p style={{ fontSize: "13px", color: COLORS.darktext, margin: "0 0 6px", fontWeight: "700", fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: "0.5px" }}>Heute</p>
-            <p style={{ fontSize: "14px", color: COLORS.darktext, margin: "0", lineHeight: "1.5" }}>Was heute dran ist. Nicht mehr.</p>
-          </div>
-        </div>
-
+        {/* Block 1: In deinem Aufgaben-Tool */}
         <div style={styles.checklist}>
-          <p style={{ fontSize: "13px", color: COLORS.midgray, margin: "0 0 8px", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "sans-serif" }}>Jetzt in deinem Tool:</p>
-          <p style={styles.checkItem}>○ Lösche oder delegiere, was nicht mehr relevant ist</p>
-          <p style={styles.checkItem}>○ Achte auf selbsterklärende Formulierungen</p>
-          <p style={styles.checkItem}>○ Weise den Aufgaben konkrete Zeitabschätzungen zu</p>
-          <p style={styles.checkItem}>○ Verschiebe Aufgaben in die Spalte „Diese Woche"</p>
+          <p style={styles.checklistTitle}>In deinem Aufgaben-Tool:</p>
+          <CheckItem checked={weekData.aufgabenChecks[0]} onToggle={() => toggleCheck("aufgabenChecks", 0)} boxStyle={styles.cboxNeutral} boxStyleChecked={styles.cboxNeutralChecked}>Löschen oder delegieren, was nicht mehr relevant ist</CheckItem>
+          <CheckItem checked={weekData.aufgabenChecks[1]} onToggle={() => toggleCheck("aufgabenChecks", 1)} boxStyle={styles.cboxNeutral} boxStyleChecked={styles.cboxNeutralChecked}>Formulierungen selbsterklärend machen</CheckItem>
+          <CheckItem checked={weekData.aufgabenChecks[2]} onToggle={() => toggleCheck("aufgabenChecks", 2)} boxStyle={styles.cboxNeutral} boxStyleChecked={styles.cboxNeutralChecked}>Zeitabschätzung pro Aufgabe</CheckItem>
+          <CheckItem checked={weekData.aufgabenChecks[3]} onToggle={() => toggleCheck("aufgabenChecks", 3)} boxStyle={styles.cboxNeutral} boxStyleChecked={styles.cboxNeutralChecked}>Aufgaben in „Diese Woche" verschieben</CheckItem>
         </div>
 
+        {/* Block 2: Zufriedenheit */}
+        <div style={styles.satisfactionBox}>
+          <p style={styles.satisfactionQuestion}>Wie zufrieden bist du mit deiner Aufgabenliste?</p>
+          <SatisfactionSlider value={weekData.aufgabenSatisfaction} onChange={(v) => updateField("aufgabenSatisfaction", v)} lowLabel="1 · wenig" highLabel="10 · top" />
+        </div>
+
+        {/* Block 3: Zwischenüberschrift */}
+        <h3 style={styles.sectionHeading}>Kanban-Aufgabenliste</h3>
+
+        {/* Block 4: Smart Tipp */}
         <SmartTipp>
           Collect — Organize — Do: Zuerst sammeln, dann organisieren, dann erledigen. Die Aufgaben wandern Schritt für Schritt von links nach rechts.
         </SmartTipp>
 
-        <p style={{ fontSize: "16px", color: COLORS.midgray, lineHeight: "1.55", margin: "0", fontStyle: "italic" }}>
-          Das Ergebnis: eine übersichtliche Liste — geordnet nach Woche und Tag, bereit zur Umsetzung.
-        </p>
+        {/* Block 5: Kanban-Visual */}
+        <div style={{ display: "flex", gap: "8px", marginBottom: "20px", flexWrap: "wrap" }}>
+          <div style={{ flex: 1, minWidth: "130px", padding: "14px 12px", backgroundColor: COLORS.lightgray, borderRadius: "3px", borderTop: `3px solid ${COLORS.midgray}` }}>
+            <p style={{ fontSize: "12px", color: COLORS.midgray, margin: "0 0 6px", fontWeight: "700", fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: "0.3px", overflowWrap: "break-word" }}>Aufgabenspeicher</p>
+            <p style={{ fontSize: "14px", color: COLORS.darktext, margin: "0", lineHeight: "1.5" }}>Alles was anfällt, landet zuerst hier.</p>
+          </div>
+          <div style={{ flex: 1, minWidth: "130px", padding: "14px 12px", backgroundColor: COLORS.lightgray, borderRadius: "3px", borderTop: `3px solid ${COLORS.primary}` }}>
+            <p style={{ fontSize: "12px", color: COLORS.primary, margin: "0 0 6px", fontWeight: "700", fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: "0.3px", overflowWrap: "break-word" }}>Diese Woche</p>
+            <p style={{ fontSize: "14px", color: COLORS.darktext, margin: "0", lineHeight: "1.5" }}>Was du diese Woche erledigen willst.</p>
+          </div>
+          <div style={{ flex: 1, minWidth: "130px", padding: "14px 12px", backgroundColor: COLORS.lightgray, borderRadius: "3px", borderTop: `3px solid ${COLORS.accent}` }}>
+            <p style={{ fontSize: "12px", color: COLORS.darktext, margin: "0 0 6px", fontWeight: "700", fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: "0.3px", overflowWrap: "break-word" }}>Heute</p>
+            <p style={{ fontSize: "14px", color: COLORS.darktext, margin: "0", lineHeight: "1.5" }}>Was heute dran ist. Nicht mehr.</p>
+          </div>
+        </div>
 
         <div style={styles.fingerNav}>
           <button onClick={() => setStep(3)} style={styles.secondaryBtn}>Zurück</button>
           <div style={{ flex: 1 }} />
-          <button onClick={() => nextStep(5)} style={styles.primaryBtnSmall}>Zu Triple-A →</button>
+          <button onClick={() => { track("aufgaben_satisfaction", weekData.aufgabenSatisfaction ? { value: weekData.aufgabenSatisfaction } : undefined); nextStep(5); }} style={styles.primaryBtnSmall}>Zu Triple-A →</button>
         </div>
       </div></div>
     );
@@ -549,6 +576,26 @@ export default function WochenRoutine() {
   // ==================== DONE ====================
   if (step === 6) {
     const count = getCompletedWeeks().length;
+    const rollingWeeks = (() => {
+      const keys = [];
+      let k = currentWeek;
+      for (let i = 0; i < 12; i++) { keys.unshift(k); k = getPreviousWeekKey(k); }
+      const existingKeys = Object.keys(allWeeks);
+      const firstKey = existingKeys.length > 0 ? existingKeys.slice().sort()[0] : currentWeek;
+      return keys.map((key) => ({
+        key,
+        completed: !!allWeeks[key]?.completed,
+        beforeFirst: key < firstKey,
+      }));
+    })();
+    const rollingCompletedCount = rollingWeeks.filter((w) => w.completed).length;
+    const rollingStreak = (() => {
+      let s = 0;
+      for (let i = rollingWeeks.length - 1; i >= 0; i--) {
+        if (rollingWeeks[i].completed) s++; else break;
+      }
+      return s;
+    })();
     return (
       <>
         <div style={styles.container}><div style={styles.card}>
@@ -620,36 +667,29 @@ export default function WochenRoutine() {
             </p>
           </div>
 
-          {/* Streak / 12 week grid */}
+          {/* Rollierende 12-Wochen-Darstellung */}
           <div style={{ borderTop: `1px solid ${COLORS.lightgray}`, paddingTop: "16px", marginBottom: "20px" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: "3px", marginBottom: "8px" }}>
-              {Array.from({ length: 12 }, (_, i) => {
-                const isCurrent = i === Math.min(count, 11);
-                const isCompleted = i < count;
-                return (
-                  <div key={i} style={{
-                    aspectRatio: "1",
-                    borderRadius: "3px",
-                    backgroundColor: isCompleted ? COLORS.primary : isCurrent ? "transparent" : COLORS.lightgray,
-                    border: isCurrent && !isCompleted ? `1.5px dashed ${COLORS.midgray}` : "none",
-                  }} />
-                );
+            <p style={{ ...TYPO.caps, color: COLORS.midgray, fontFamily: "sans-serif", margin: "0 0 12px" }}>Deine letzten 12 Wochen</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: "4px", marginBottom: "6px" }}>
+              {rollingWeeks.map((w, i) => {
+                const isLast = i === rollingWeeks.length - 1;
+                let bg = COLORS.lightgray, border = "none", boxShadow = "none", opacity = 1;
+                if (w.beforeFirst) { bg = "#f7f7f5"; opacity = 0.4; }
+                else if (w.completed) { bg = COLORS.primary; }
+                else { bg = COLORS.lightgray; border = `1.5px dashed ${COLORS.warmgray}`; }
+                if (isLast && w.completed) { boxShadow = `0 0 0 2px #fff, 0 0 0 3.5px ${COLORS.accent}`; }
+                return <div key={w.key} style={{ aspectRatio: "1", borderRadius: "3px", backgroundColor: bg, border, boxShadow, opacity }} />;
               })}
             </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(12, 1fr)", gap: "4px", marginBottom: "10px" }}>
+              {rollingWeeks.map((w) => (
+                <span key={w.key} style={{ fontSize: "9px", color: COLORS.midgray, fontFamily: "sans-serif", fontWeight: "600", textAlign: "center" }}>{parseInt(w.key.split("-W")[1])}</span>
+              ))}
+            </div>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <p style={{ fontSize: "14px", color: COLORS.darktext, margin: "0", fontWeight: "600" }}>{count} von 12 Wochen</p>
+              <p style={{ fontSize: "14px", color: COLORS.darktext, margin: "0", fontWeight: "600" }}>{rollingCompletedCount} von 12 abgeschlossen</p>
               <p style={{ fontSize: "14px", color: COLORS.primary, margin: "0", fontWeight: "600" }}>
-                {count >= 2 ? `${(() => {
-                  const keys = Object.keys(allWeeks).filter(k => allWeeks[k].completed).sort().reverse();
-                  let streak = 1;
-                  for (let i = 0; i < keys.length - 1; i++) {
-                    const curr = keys[i];
-                    const prev = getPreviousWeekKey(curr);
-                    if (keys[i + 1] === prev) streak++;
-                    else break;
-                  }
-                  return streak;
-                })()} Wochen in Folge` : ""}
+                {rollingStreak >= 2 ? `${rollingStreak} Wochen in Folge` : ""}
               </p>
             </div>
           </div>
@@ -705,6 +745,113 @@ function StepPreview({ num, title, time, desc }) {
   );
 }
 
+// ==================== SATISFACTION SLIDER ====================
+function SatisfactionSlider({ value, onChange, lowLabel, highLabel }) {
+  return (
+    <div>
+      <div style={styles.sliderValue}>
+        {value == null
+          ? <span style={styles.sliderEmpty}>– noch nicht bewertet –</span>
+          : <span><span style={styles.sliderNum}>{value}</span><span style={styles.sliderMax}>/10</span></span>}
+      </div>
+      <input type="range" min="1" max="10" step="1" value={value ?? 5} onChange={(e) => onChange(parseInt(e.target.value))} style={styles.rangeInput} />
+      <div style={styles.sliderLabels}><span>{lowLabel}</span><span>{highLabel}</span></div>
+    </div>
+  );
+}
+
+// ==================== CHECK ITEM ====================
+function CheckItem({ checked, onToggle, boxStyle, boxStyleChecked, children }) {
+  return (
+    <div onClick={onToggle} style={styles.checkItemRow}>
+      <div style={{ ...styles.checkBox, ...boxStyle, ...(checked ? boxStyleChecked : {}) }}>{checked ? "✓" : ""}</div>
+      <div style={{ ...styles.checkLabel, ...(checked ? styles.checkLabelChecked : {}) }}>{children}</div>
+    </div>
+  );
+}
+
+// ==================== LEGEND ITEM ====================
+function LegendItem({ num, swatchStyle, children }) {
+  return (
+    <div style={styles.legendItem}>
+      <span style={styles.legendNum}>{num}</span>
+      <span style={{ ...styles.legendSwatchBase, ...swatchStyle }} />
+      {children}
+    </div>
+  );
+}
+
+// ==================== WEEK SCHEMA (Kalenderblatt) ====================
+function WeekSchema() {
+  const arbeit = (top, height) => ({ position: "absolute", left: 0, right: 0, top, height, backgroundColor: "rgba(0,131,142,0.08)", borderLeft: `3px solid ${COLORS.primary}`, zIndex: 1 });
+  const kern = (top, height, label) => ({ style: { position: "absolute", left: "6px", right: "4px", top, height, borderRadius: "2px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif", fontSize: "9px", fontWeight: "600", padding: "0 3px", textAlign: "center", lineHeight: "1.1", zIndex: 2, boxShadow: "0 1px 2px rgba(0,0,0,0.05)", overflow: "hidden", backgroundColor: "#fff", color: COLORS.primary, border: `1.5px solid ${COLORS.primary}`, borderLeft: `3px solid ${COLORS.primary}` }, label });
+  const fix = (top, height, label) => ({ style: { position: "absolute", left: "6px", right: "4px", top, height, borderRadius: "2px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif", fontSize: "9px", fontWeight: "600", padding: "0 3px", textAlign: "center", lineHeight: "1.1", zIndex: 2, boxShadow: "0 1px 2px rgba(0,0,0,0.05)", overflow: "hidden", backgroundColor: "#fff", color: "#7a6b00", border: `1.5px solid ${COLORS.warm}`, borderLeft: `3px solid ${COLORS.warm}` }, label });
+  const pause = (top, height, label) => ({ style: { position: "absolute", left: "6px", right: "4px", top, height, borderRadius: "2px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif", fontSize: "9px", fontWeight: "600", padding: "0 3px", textAlign: "center", lineHeight: "1.1", zIndex: 2, boxShadow: "0 1px 2px rgba(0,0,0,0.05)", overflow: "hidden", backgroundColor: "rgba(105,240,174,0.32)", color: "#1a6f40", borderLeft: `3px solid ${COLORS.accent}`, fontStyle: "italic" }, label });
+  const puffer = (top, height) => ({ position: "absolute", left: "6px", right: "4px", top, height, borderRadius: "2px", zIndex: 2, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif", fontSize: "8.5px", color: COLORS.primary, fontWeight: "600", fontStyle: "italic", letterSpacing: "0.3px", backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(0,131,142,0.22) 4px, rgba(0,131,142,0.22) 5px)" });
+  const dayColStyle = { position: "relative", height: "312px", backgroundColor: "#fff", borderRadius: "3px", overflow: "hidden" };
+
+  const days = [
+    { label: "Mo", blocks: [
+      { t: "fix", top: 24, h: 24, l: "Termin" }, { t: "pause", top: 48, h: 12, l: "Pause" },
+      { t: "kern", top: 60, h: 60, l: "Kernaktivität" }, { t: "freizeit", top: 120, h: 24, l: "Mittag" },
+      { t: "fix", top: 144, h: 24, l: "Termin" }, { t: "fix", top: 168, h: 36, l: "Termin" },
+      { t: "pause", top: 204, h: 12, l: "Pause" },
+    ], arbeit: [[24, 96], [144, 120]], puffer: [240, 24] },
+    { label: "Di", blocks: [
+      { t: "kern", top: 24, h: 60, l: "Kernaktivität" }, { t: "pause", top: 84, h: 12, l: "Pause" },
+      { t: "fix", top: 96, h: 24, l: "Termin" }, { t: "freizeit", top: 120, h: 24, l: "Mittag" },
+      { t: "fix", top: 144, h: 48, l: "Termin" }, { t: "pause", top: 192, h: 12, l: "Pause" },
+      { t: "freizeit", top: 264, h: 36, l: "Sport" },
+    ], arbeit: [[24, 96], [144, 120]], puffer: [240, 24] },
+    { label: "Mi", blocks: [
+      { t: "fix", top: 24, h: 36, l: "Termin" }, { t: "fix", top: 60, h: 36, l: "Termin" },
+      { t: "pause", top: 96, h: 12, l: "Pause" }, { t: "fix", top: 108, h: 12, l: "Termin" },
+      { t: "freizeit", top: 120, h: 24, l: "Mittag" }, { t: "fix", top: 144, h: 30, l: "Termin" },
+      { t: "fix", top: 174, h: 30, l: "Termin" }, { t: "pause", top: 204, h: 12, l: "Pause" },
+      { t: "fix", top: 216, h: 24, l: "Termin" },
+    ], arbeit: [[24, 96], [144, 120]], puffer: [240, 24] },
+    { label: "Do", blocks: [
+      { t: "fix", top: 24, h: 36, l: "Termin" }, { t: "pause", top: 60, h: 12, l: "Pause" },
+      { t: "kern", top: 72, h: 48, l: "Kernaktivität" }, { t: "freizeit", top: 120, h: 24, l: "Mittag" },
+      { t: "kern", top: 144, h: 48, l: "Kernaktivität" }, { t: "pause", top: 192, h: 12, l: "Pause" },
+      { t: "fix", top: 216, h: 24, l: "Termin" }, { t: "freizeit", top: 264, h: 36, l: "Konzert" },
+    ], arbeit: [[24, 96], [144, 120]], puffer: [240, 24] },
+    { label: "Fr", blocks: [
+      { t: "kern", top: 24, h: 36, l: "Kernaktivität" }, { t: "pause", top: 84, h: 12, l: "Pause" },
+      { t: "fix", top: 96, h: 24, l: "Termin" }, { t: "freizeit", top: 120, h: 24, l: "Mittag" },
+      { t: "fix", top: 144, h: 36, l: "Termin" }, { t: "pause", top: 192, h: 12, l: "Pause" },
+    ], arbeit: [[24, 96], [144, 96]], puffer: [216, 24] },
+  ];
+
+  const renderBlock = (b, i) => {
+    const cfg = b.t === "kern" ? kern(`${b.top}px`, `${b.h}px`, b.l)
+      : b.t === "fix" ? fix(`${b.top}px`, `${b.h}px`, b.l)
+      : pause(`${b.top}px`, `${b.h}px`, b.l);
+    return <div key={i} style={cfg.style}>{cfg.label}</div>;
+  };
+
+  return (
+    <div style={styles.kalenderblatt}>
+      <div style={styles.schemaHeader}>
+        <span></span>
+        {days.map((d) => <span key={d.label}>{d.label}</span>)}
+      </div>
+      <div style={styles.schemaBody}>
+        <div style={styles.schemaTimes}>
+          {["7", "9", "11", "13", "15", "17", "19"].map((t) => <span key={t}>{t}</span>)}
+        </div>
+        {days.map((d, di) => (
+          <div key={di} style={dayColStyle}>
+            {d.arbeit.map((a, ai) => <div key={ai} style={arbeit(`${a[0]}px`, `${a[1]}px`)} />)}
+            {d.blocks.map(renderBlock)}
+            <div style={puffer(`${d.puffer[0]}px`, `${d.puffer[1]}px`)}>Puffer</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ==================== HISTORY VIEW (v2) ====================
 function HistoryView({ weeks }) {
   const [expandedKey, setExpandedKey] = useState(null);
@@ -728,8 +875,8 @@ function HistoryView({ weeks }) {
     : null;
 
   const scoreColor = (s) => {
-    if (s >= 4) return COLORS.accent;
-    if (s >= 3) return COLORS.primary;
+    if (s >= 8) return COLORS.accent;
+    if (s >= 5) return COLORS.primary;
     return COLORS.warmgray;
   };
 
@@ -740,12 +887,12 @@ function HistoryView({ weeks }) {
     width: "32px",
     height: "32px",
     borderRadius: "50%",
-    fontSize: "14px",
+    fontSize: "13px",
     fontWeight: "700",
     flexShrink: 0,
     fontFamily: "sans-serif",
-    backgroundColor: s >= 4 ? COLORS.accent : s >= 3 ? COLORS.primary : COLORS.warmgray,
-    color: s >= 4 ? COLORS.black : s >= 3 ? "#fff" : COLORS.darktext,
+    backgroundColor: s >= 8 ? COLORS.accent : s >= 5 ? COLORS.primary : COLORS.warmgray,
+    color: s >= 8 ? COLORS.black : s >= 5 ? "#fff" : COLORS.darktext,
   });
 
   if (completed.length === 0) {
@@ -778,10 +925,10 @@ function HistoryView({ weeks }) {
             <p style={statLabel}>Schnitt</p>
             <div style={statValue}>
               <span style={statNum}>{avgScore.toFixed(1).replace(".", ",")}</span>
-              <span style={statUnit}>/ 5</span>
+              <span style={statUnit}>/ 10</span>
             </div>
             <div style={statBarWrap}>
-              <div style={{ ...statBar, width: `${(avgScore / 5) * 100}%`, backgroundColor: COLORS.primary }} />
+              <div style={{ ...statBar, width: `${(avgScore / 10) * 100}%`, backgroundColor: COLORS.primary }} />
             </div>
           </div>
         )}
@@ -792,7 +939,7 @@ function HistoryView({ weeks }) {
         <div style={{ marginBottom: "28px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "4px" }}>
             <p style={{ fontSize: "16px", fontWeight: "600", color: COLORS.darktext, margin: "0", lineHeight: "1.35" }}>Plan-Umsetzung</p>
-            <span style={{ fontSize: "12px", color: COLORS.midgray, fontFamily: "sans-serif", fontWeight: "500" }}>Skala 1–5</span>
+            <span style={{ fontSize: "12px", color: COLORS.midgray, fontFamily: "sans-serif", fontWeight: "500" }}>Skala 1–10</span>
           </div>
           <p style={{ fontSize: "14px", color: COLORS.midgray, fontStyle: "italic", margin: "0 0 16px", lineHeight: "1.45" }}>
             Wie gut hat dein Plan zur Realität gepasst?
@@ -801,19 +948,19 @@ function HistoryView({ weeks }) {
           <div style={{ display: "flex", gap: "8px" }}>
             {/* Y-axis */}
             <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-end", paddingBottom: "22px", height: "130px", flexShrink: 0 }}>
-              {[5, 4, 3, 2, 1].map(n => (
+              {[10, 8, 6, 4, 2].map(n => (
                 <span key={n} style={{ fontSize: "11px", color: COLORS.midgray, fontFamily: "sans-serif", lineHeight: "1", fontWeight: "600" }}>{n}</span>
               ))}
             </div>
             {/* Chart area */}
             <div style={{ flex: 1, display: "flex", alignItems: "flex-end", gap: "8px", height: "130px", borderLeft: `1px solid ${COLORS.lightgray}`, paddingLeft: "8px", position: "relative" }}>
-              {[1, 2, 3, 4, 5].map(level => (
-                <div key={level} style={{ position: "absolute", left: "8px", right: "0", borderTop: `1px dashed ${COLORS.lightgray}`, height: "0", bottom: `${22 + (level - 1) * 23.5}px`, pointerEvents: "none" }} />
+              {[2, 4, 6, 8, 10].map(level => (
+                <div key={level} style={{ position: "absolute", left: "8px", right: "0", borderTop: `1px dashed ${COLORS.lightgray}`, height: "0", bottom: `${22 + (level / 10) * 94}px`, pointerEvents: "none" }} />
               ))}
               {last12.map(([key, d]) => (
                 <div key={key} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", height: "100%", position: "relative", zIndex: 1 }}>
                   <span style={{ fontSize: "12px", fontWeight: "700", color: COLORS.darktext, fontFamily: "sans-serif", marginBottom: "4px" }}>{d.planCheckScore}</span>
-                  <div style={{ width: "100%", borderRadius: "3px 3px 0 0", height: `${(d.planCheckScore / 5) * 94}px`, backgroundColor: scoreColor(d.planCheckScore), minHeight: "4px" }} />
+                  <div style={{ width: "100%", borderRadius: "3px 3px 0 0", height: `${(d.planCheckScore / 10) * 94}px`, backgroundColor: scoreColor(d.planCheckScore), minHeight: "4px" }} />
                   <span style={{ fontSize: "11px", color: COLORS.midgray, marginTop: "6px", fontFamily: "sans-serif", fontWeight: "600" }}>{parseInt(key.split("-W")[1])}</span>
                 </div>
               ))}
@@ -822,9 +969,9 @@ function HistoryView({ weeks }) {
 
           {/* Legend */}
           <div style={{ display: "flex", gap: "14px", marginTop: "14px", flexWrap: "wrap", fontFamily: "sans-serif", fontSize: "12px", color: COLORS.midgray, fontWeight: "500" }}>
-            <div style={legendItem}><span style={{ ...legendSwatch, backgroundColor: COLORS.accent }} />Gut umgesetzt (4–5)</div>
-            <div style={legendItem}><span style={{ ...legendSwatch, backgroundColor: COLORS.primary }} />Teilweise (3)</div>
-            <div style={legendItem}><span style={{ ...legendSwatch, backgroundColor: COLORS.warmgray }} />Wenig (1–2)</div>
+            <div style={legendItem}><span style={{ ...legendSwatch, backgroundColor: COLORS.accent }} />Gut umgesetzt (8–10)</div>
+            <div style={legendItem}><span style={{ ...legendSwatch, backgroundColor: COLORS.primary }} />Teilweise (5–7)</div>
+            <div style={legendItem}><span style={{ ...legendSwatch, backgroundColor: COLORS.warmgray }} />Wenig (1–4)</div>
           </div>
         </div>
       )}
@@ -954,4 +1101,48 @@ const styles = {
   progressBar: { height: "6px", backgroundColor: COLORS.warmgray, borderRadius: "3px", overflow: "hidden" },
   progressFill: { height: "100%", backgroundColor: COLORS.primary, borderRadius: "3px", transition: "width 0.5s ease" },
   progressLabels: { display: "flex", justifyContent: "space-between", fontSize: "12px", color: COLORS.midgray, marginTop: "4px", fontFamily: "sans-serif", fontWeight: "500" },
+
+  // ---- Neu: Checkliste mit farbigen Boxen ----
+  checklistTitle: { fontSize: "12px", fontWeight: "700", color: COLORS.midgray, textTransform: "uppercase", letterSpacing: "0.5px", fontFamily: "sans-serif", margin: "0 0 12px" },
+  checkItemRow: { display: "flex", alignItems: "flex-start", gap: "12px", padding: "8px 0", cursor: "pointer", userSelect: "none" },
+  checkBox: { width: "22px", height: "22px", borderRadius: "3px", backgroundColor: "#fff", flexShrink: 0, marginTop: "1px", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif", fontSize: "14px", fontWeight: "700", lineHeight: 1, color: "#fff" },
+  checkLabel: { fontSize: "15px", lineHeight: "1.5", color: COLORS.darktext },
+  checkLabelChecked: { color: COLORS.midgray, textDecoration: "line-through", textDecorationColor: COLORS.warmgray },
+
+  cboxArbeit: { backgroundColor: "rgba(0,131,142,0.08)", borderLeft: `3px solid ${COLORS.primary}` },
+  cboxArbeitChecked: { backgroundColor: COLORS.primary },
+  cboxPause: { backgroundColor: "rgba(105,240,174,0.32)", borderLeft: `3px solid ${COLORS.accent}` },
+  cboxPauseChecked: { backgroundColor: COLORS.accent, color: "#1a6f40" },
+  cboxFix: { backgroundColor: "#fff", border: `1.5px solid ${COLORS.warm}`, borderLeft: `3px solid ${COLORS.warm}` },
+  cboxFixChecked: { backgroundColor: COLORS.warm, color: "#5c5000" },
+  cboxKern: { backgroundColor: "#fff", border: `1.5px solid ${COLORS.primary}`, borderLeft: `3px solid ${COLORS.primary}` },
+  cboxKernChecked: { backgroundColor: COLORS.primary },
+  cboxPuffer: { backgroundColor: "#fff", backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(0,131,142,0.35) 3px, rgba(0,131,142,0.35) 4px)", border: "1.5px solid rgba(0,131,142,0.4)" },
+  cboxPufferChecked: { backgroundColor: COLORS.primary, backgroundImage: "none" },
+  cboxNeutral: { backgroundColor: "#fff", border: `2px solid ${COLORS.warmgray}` },
+  cboxNeutralChecked: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
+
+  // ---- Neu: Kalenderblatt (Wochen-Schema) ----
+  kalenderblatt: { backgroundColor: "#fff", border: `1px solid ${COLORS.lightgray}`, borderRadius: "6px", padding: "14px 12px 12px", marginBottom: "20px" },
+  schemaHeader: { display: "grid", gridTemplateColumns: "36px repeat(5, 1fr)", gap: "5px", marginBottom: "4px", fontFamily: "sans-serif", fontSize: "10px", fontWeight: "700", color: COLORS.midgray, textAlign: "center", letterSpacing: "0.5px", textTransform: "uppercase" },
+  schemaBody: { display: "grid", gridTemplateColumns: "36px repeat(5, 1fr)", gap: "5px", position: "relative" },
+  schemaTimes: { display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2px 0", height: "312px", fontFamily: "sans-serif", fontSize: "10px", fontWeight: "500", color: COLORS.midgray, textAlign: "right", paddingRight: "3px" },
+
+  // ---- Neu: Der Rahmen (Legende) ----
+  rahmenBlock: { backgroundColor: COLORS.lightgray, borderRadius: "3px", padding: "16px 20px", marginBottom: "20px" },
+  rahmenGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px 20px", fontFamily: "sans-serif" },
+  legendItem: { display: "flex", alignItems: "center", gap: "8px", fontSize: "13px", color: COLORS.darktext, lineHeight: "1.4" },
+  legendNum: { fontFamily: "sans-serif", fontSize: "10px", fontWeight: "700", color: COLORS.primary, width: "12px", display: "inline-block" },
+  legendSwatchBase: { width: "15px", height: "15px", borderRadius: "2px", flexShrink: 0, display: "inline-block" },
+
+  // ---- Neu: Zufriedenheits-Slider ----
+  satisfactionBox: { backgroundColor: "#fff", border: `1px solid ${COLORS.warmgray}`, borderRadius: "3px", padding: "20px 22px 18px", marginBottom: "24px" },
+  satisfactionQuestion: { fontSize: "16px", fontWeight: "600", margin: "0 0 18px", lineHeight: "1.4" },
+  sliderValue: { textAlign: "center", marginBottom: "8px", minHeight: "34px" },
+  sliderEmpty: { fontSize: "15px", color: COLORS.midgray, fontStyle: "italic" },
+  sliderNum: { fontSize: "32px", fontWeight: "600", color: COLORS.primary, letterSpacing: "-1px", fontFamily: "'Georgia', serif" },
+  sliderMax: { fontSize: "15px", color: COLORS.midgray, marginLeft: "2px" },
+  rangeInput: { width: "100%", height: "6px", borderRadius: "3px", outline: "none", cursor: "pointer", accentColor: COLORS.primary },
+  sliderLabels: { display: "flex", justifyContent: "space-between", marginTop: "8px", fontFamily: "sans-serif", fontSize: "11px", color: COLORS.midgray, fontWeight: "500" },
+  sectionHeading: { fontSize: "18px", fontWeight: "600", color: COLORS.black, margin: "4px 0 16px", lineHeight: "1.3" },
 };
